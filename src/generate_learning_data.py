@@ -2,10 +2,12 @@
 # created by Yun Hao @MooreLab 2019
 # This script generates feature-response datasets for learning task from group-sample relationships, then split each dataset into train set and test set  
 
+
 ## Module
 import sys
 sys.path.insert(0, 'src/')
 import ttox_data
+
 
 ## Main function 
 def main(argv):
@@ -20,6 +22,7 @@ def main(argv):
 	generate_data = ttox_data.generate_learning_dataset(argv[1], argv[2], int(argv[4]), float(argv[5]), argv[3])
 
 	return 1
+
 
 ## Call main function
 main(sys.argv)
