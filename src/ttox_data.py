@@ -1,12 +1,12 @@
 # !/usr/bin/env python
-## created by Yun Hao @MooreLab 2019
-## This script contains functions for data pre-processing. 
+# created by Yun Hao @MooreLab 2019
+# This script contains functions for data pre-processing. 
+
 
 ##  Module
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import KFold
 
 
 ## This function generates summary statistics of a dataset (number of samples)
@@ -33,7 +33,7 @@ def generate_data_summary(data_df, group, label):
 	return out_dict
 
 	
-# This function can split a dataset into train set and test set  
+## This function can split a dataset into train set and test set  
 def split_dataset_into_train_test(data_df, label, test_prop, output_pf):
 	## 0. Input argument: 
 		# data_df: input dataset  
@@ -58,7 +58,7 @@ def split_dataset_into_train_test(data_df, label, test_prop, output_pf):
 	return 1
 
 
-# This function can generate feature-response datasets for learning task from group-sample relationships, then split each dataset into train set and test set 
+## This function can generate feature-response datasets for learning task from group-sample relationships, then split each dataset into train set and test set 
 def generate_learning_dataset(relation_file, feature_file, min_N_sample, test_proportion, output_folder):
 	## 0. Input argments:
 		# relation_file: input file that contains group-sample relationships (three columns, 1: group, 2: sample, 3: label) 
@@ -119,22 +119,3 @@ def generate_learning_dataset(relation_file, feature_file, min_N_sample, test_pr
 	groups_summary_df.to_csv(output_sum_file, sep = '\t', index = False)
 	
 	return 1 
-
-def get_train_valid_from_compare(file_loc, compare_train, compare_valid, label_column, output_in_tsv = False, output_file = ''):
-	# 
-	data_df = pd.read_csv(file_loc, sep = '\t', header = 0)
-	compare_train_df = pd.read_csv(compare_train, sep = '\t', header = 0, index_col = 0)
-	compare_valid_df = pd.read_csv(compare_valid, sep = '\t', header = 0, index_col = 0)
-	train_df = data_df.loc[compare_train_df.index, :]
-	valid_df = data_df.loc[compare_valid_df.index, :]
-	# output
-	if output_in_tsv:
-		train_df.to_csv(output_file + '_train_data.tsv', sep = '\t')
-		valid_df.to_csv(output_file + '_valid_data.tsv', sep = '\t')
-	
-	# 
-	X_train, y_train = train_df.drop(label_column, axis = 1), train_df[label_column]
-	X_test, y_test = valid_df.drop(label_column, axis = 1), valid_df[label_column] 
-	
-	return X_train, X_test, y_train, y_test
-		

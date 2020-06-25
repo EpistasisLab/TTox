@@ -1,6 +1,7 @@
 # !/usr/bin/env python
-## created by Yun Hao @MooreLab 2019
-## This script contains functions for computing structure similarity between compounds.  
+# created by Yun Hao @MooreLab 2019
+# This script contains functions for computing structure similarity between compounds.  
+
 
 ## Module
 import numpy as np
