@@ -11,6 +11,7 @@ sys.path.insert(0, 'src/')
 import ttox_selection
 import ttox_learning
 
+argv = ['','data/compound_target_data/bindingdb_compounds_fingerprint_maccs_pKi_P47871_whole_data.tsv_train.tsv', 'data/compound_target_data/bindingdb_compounds_fingerprint_maccs_pKi_P47871_whole_data.tsv_test.tsv', '/home/yunhao1/project/chemical/data/offsides_compounds/fingerprint_combined/offsides_compounds_fingerprint_maccs.tsv', 'data/compound_target_feature_select/fingerprint_maccs/bindingdb_compounds_fingerprint_maccs_pKi_P47871_whole_data.tsv', 'pKi', '10', 'MultiSURFstar', '1', '0.1', 'regression', 'RandomForest', '20', '0.5']
 
 ## Main function 
 def main(argv):
@@ -28,7 +29,8 @@ def main(argv):
 		# argv 11: supervised learning methods to be used 'RandomForest' or 'XGBoost' 
 		# argv 12: number of performance-decreasing iterations before stopping the model-fitting process (due to overfitting)
 		# argv 13: lower bound of percentage to define that a feature is consisently relevant across folds
-	output_name = argv[4] + '_fd_' + argv[6] + '_fr_' + argv[7] + '_tf_' + argv[8] + '_pc_' + argv[9] + '_md_' + argv[11] + '_tl_' + argv[12] + '_cs_' + argv[13]
+		# argv 14: number of independent cross-validation runs, each run will generate one performance score
+	output_name = argv[4] + '_fd_' + argv[6] + '_fr_' + argv[7] + '_tf_' + argv[8] + '_pc_' + argv[9] + '_md_' + argv[11] + '_tl_' + argv[12] + '_cs_' + argv[13] + '_nr_' + argv[14]
 		
 	## 1. Read in input training and testing files 
 	# read in training data
@@ -38,7 +40,7 @@ def main(argv):
 
 	## 2. Split training feature-response dataset into K folds 
 	label_col_name = argv[5]
-	train_data_split_list = ttox_selection.split_dataset_into_k_folds(train_data_df, label_col_name, int(argv[6]))
+	train_data_split_list = ttox_learning.split_dataset_into_k_folds(train_data_df, label_col_name, int(argv[6]), seed_no = 0)
 	
 	## 3. Compute feature importance scores on each fold of training data using ReBATE methods  
 	feature_importance_df = ttox_selection.rank_features_by_rebate_methods(train_data_split_list, argv[7], int(argv[8]), remove_percent = float(argv[9]))
@@ -53,22 +55,17 @@ def main(argv):
 	feature_select_df.to_csv(output_name + '_select.tsv', sep = '\t', float_format = '%.5f')
 
 	## 6. Compute model performance on training data by cross-validation (for hyperparameter tuning)
-	metric_select_train = np.nan
-	metric_select_train_list = []
+	metric_select_train = [np.nan]
 	if len(select_features) > 0:
-		for tdsl in train_data_split_list:
-			tdsl_feat_train, tdsl_label_train, tdsl_feat_test, tdsl_label_test = tdsl
-			_, _, _, _, tdsl_metric = ttox_learning.evaluate_model_performance(tdsl_feat_train[select_features].values, tdsl_feat_test[select_features].values, tdsl_label_train.values, tdsl_label_test.values, argv[10], argv[11])
-			metric_select_train_list.append(tdsl_metric)
-		metric_select_train = np.mean(metric_select_train_list)
+		metric_select_train = ttox_learning.evaluate_model_performance_by_cv(train_data_df, select_features, label_col_name, int(argv[14]), int(argv[6]), argv[10], argv[11], seed_start = 1)
 	
 	## 7. Builds supervised learning model from all training data, then evaluates model performance on hold-out testing data tests the model on testing data
 	# use all features to build the model 
-	N_all_features, N_train_instances, N_test_instances, model_all, metric_all_test = ttox_learning.evaluate_model_performance(train_data_df.drop(label_col_name, axis = 1).values, test_data_df.drop(label_col_name, axis = 1).values, train_data_df[label_col_name].values, test_data_df[label_col_name].values, argv[10], argv[11])
+	N_all_features, N_train_instances, N_test_instances, model_all, metric_all_test = ttox_learning.evaluate_model_performance(train_data_df.drop(label_col_name, axis = 1).values, test_data_df.drop(label_col_name, axis = 1).values, train_data_df[label_col_name].values, test_data_df[label_col_name].values, argv[10], argv[11], seed_number = 0)
 	# use selected features to build the model 
 	N_select_features, metric_select_test = 0, np.nan
 	if len(select_features) > 0:
-		N_select_features, N_train_instances, N_test_instances, model_select, metric_select_test = ttox_learning.evaluate_model_performance(train_data_df[select_features].values, test_data_df[select_features].values, train_data_df[label_col_name].values, test_data_df[label_col_name].values, argv[10], argv[11])	
+		N_select_features, N_train_instances, N_test_instances, model_select, metric_select_test = ttox_learning.evaluate_model_performance(train_data_df[select_features].values, test_data_df[select_features].values, train_data_df[label_col_name].values, test_data_df[label_col_name].values, argv[10], argv[11], seed_number = 0)	
 	# generate performance summary file  
 	perf_summary = ttox_selection.generate_performance_summary(N_train_instances, N_test_instances, N_all_features, metric_all_test, select_features, N_select_features, metric_select_train, metric_select_test)
 	perf_file = open(output_name + '_performance.txt', 'w')

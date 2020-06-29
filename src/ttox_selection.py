@@ -7,7 +7,6 @@
 import sys
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import KFold
 from skrebate import SURF
 from skrebate import SURFstar
 from skrebate import MultiSURF
@@ -15,28 +14,6 @@ from skrebate import MultiSURFstar
 from skrebate import TuRF
 sys.path.insert(0, 'src/')
 import ttox_learning
-
-
-## This function split a feature-response dataset into K folds 
-def split_dataset_into_k_folds(data_df, label, N_k):
-	## 0. Input arguments: 
-		# data_df: data frame that contains the learning data 
-		# label: name of label(response) column
-		# N_k: number of folds to split into 
-	
-	# 1. Separate data into feature and response 
-	X, y = data_df.drop(label, axis = 1), data_df[label]
-	
-	# 2. Split data into K folds
-	kf = KFold(n_splits = N_k, random_state = 0, shuffle = True)
-	data_list = []
-	for train_index, test_index in kf.split(X):
-		X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-		y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-		fold_data = X_train, y_train, X_test, y_test
-		data_list.append(fold_data)
-
-	return data_list
 
 
 ## This function compute feature importance scores on each fold of training data using ReBATE methods  
@@ -185,7 +162,11 @@ def generate_performance_summary(N_train_instances, N_test_instances, N_all_feat
 		# metric_select_train: training performance of model using relevant features 
 		# metric_select_test: testing performance of model using relevant features 
 
-	## 1. Add model statistics to a list  
+	## 1. Convert training performance list to string 
+	metric_select_train = np.round(metric_select_train, 5)
+	metric_select_train_str = [str(mst) for mst in metric_select_train]
+	
+	## 2. Add model statistics to a list  
 	perf_list = []
 	perf_list.append('Number of training instances: ' + str(N_train_instances))
 	perf_list.append('Number of testing instances: ' + str(N_test_instances))
@@ -193,9 +174,7 @@ def generate_performance_summary(N_train_instances, N_test_instances, N_all_feat
 	perf_list.append('Testing performance of model using all features: ' + str(round(metric_all_test, 5)))
 	perf_list.append('Relevant features: ' + ','.join(select_features))
 	perf_list.append('Number of relevant features: '+ str(N_select_features))
-	perf_list.append('Training performance of model using relevant features: '+ str(round(metric_select_train, 5)))
+	perf_list.append('Training performance of model using relevant features: ' + ','.join(metric_select_train_str))
 	perf_list.append('Testing performance of model using relevant features: '+ str(round(metric_select_test, 5)))
 
 	return perf_list
-
-		

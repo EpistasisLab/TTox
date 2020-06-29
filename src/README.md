@@ -10,7 +10,7 @@
 
 + [`ttox_sim.py`](ttox_sim.py) contains functions for computing structure similarity between compounds.  
 
-+ [`select_feature_by_cv.py`](select_feature_by_cv.py) combines ReBATE methods and cross-validation to select relevant features, then evaluates model performance on hold-out testing set, eventually implements the model to predict responses of new instances. [`run/run_select_feature_by_cv_target.R`](run/run_select_feature_by_cv_target.R) generates shell scripts that run the pipeline on compound-target interaction datasets.
++ [`select_feature_by_cv.py`](select_feature_by_cv.py) combines ReBATE methods and cross-validation to select relevant features, then evaluates model performance on hold-out testing set, eventually implements the model to predict responses of new instances. [`run/run_select_feature_by_cv_target_tuning.R`](run/run_select_feature_by_cv_target_tuning.R) generates shell scripts that run feature selection hyperparamter tuning on sampled subset of compound-target interaction datasets. [`run/run_select_feature_by_cv_target.R`](run/run_select_feature_by_cv_target.R) generates shell scripts that run the pipeline using the optimal hyperparameter set on all compound-target interaction datasets.
 
 + [`ttox_learning.py`](ttox_learning.py) contains functions for building, evaluating, and implementing machine learning models. 
 
@@ -24,4 +24,6 @@
 
 + [`run/compare_train_test_similarity_offsides.sh`](run/compare_train_test_similarity_offsides.sh) runs [`compare_train_test_similarity.py`](compare_train_test_similarity.py) on generated structure-toxicity data of OFFSIDES compounds.
 
-+ [`run/select_feature_by_cv_target.sh`](run/select_feature_by_cv_target.sh) runs [`select_feature_by_cv.py`](select_feature_by_cv.py) on compound-target interaction datasets. 
++ [`run/run_select_feature_by_cv_target_tuning.sh`](run/run_select_feature_by_cv_target_tuning.sh) runs [`run/run_select_feature_by_cv_target_tuning.R`](run/run_select_feature_by_cv_target_tuning.R) on two types of compound-target interaction datasets: chemical fingerprints and molecular descriptors.
+
++ [`run/select_feature_by_cv_target_tuning_fingerprint_maccs.sh`](run/select_feature_by_cv_target_tuning_fingerprint_maccs.sh) and [`run/select_feature_by_cv_target_tuning_descriptor_all.sh`](run/select_feature_by_cv_target_tuning_descriptor_all.sh) runs [`select_feature_by_cv.py`](select_feature_by_cv.py) on two types of compound-target interaction datasets: chemical fingerprints and molecular descriptors, respectively, for the purpose of feature selection hyperparamter tuning.  
