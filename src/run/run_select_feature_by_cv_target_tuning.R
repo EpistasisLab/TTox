@@ -10,6 +10,7 @@ source("src/functions.R");
 Args		<- commandArgs(T);
 descriptor_type	<- Args[1];     # input folder of all descriptor files
 N_files		<- Args[2];	# number of files to choose for hyperparameter tuning
+N_cores		<- Args[3];	# number of cores to run the jobs 
 
 ## 1. Obtain names of input files
 # list all files in the folder
@@ -73,4 +74,4 @@ commands <- generate.all.possible.hyperparameter.combinations(part);
 ran_id <- sample(1:length(commands), length(commands));
 commands <- commands[ran_id];
 # write shell scripts for jobs
-generate.parallel.bash.files(commands, 20, paste('select_feature_by_cv_target_tuning', descriptor_type, sep = "_"), "src/run/");
+generate.parallel.bash.files(commands, as.integer(N_cores), paste('select_feature_by_cv_target_tuning', descriptor_type, sep = "_"), "src/run/");

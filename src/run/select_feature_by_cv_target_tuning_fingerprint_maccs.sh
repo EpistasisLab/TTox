@@ -1,7 +1,7 @@
 #!/bin/bash
-#BSUB -q epistasis_normal
+#BSUB -q epistasis_long
 #BSUB -J select_feature_by_cv_target_tuning_fingerprint_maccs
-#BSUB -n 20
+#BSUB -n 15
 #BSUB -o src/run/select_feature_by_cv_target_tuning_fingerprint_maccs.%J.out
 #BSUB -e src/run/select_feature_by_cv_target_tuning_fingerprint_maccs.%J.error
 #BSUB -N
@@ -24,8 +24,3 @@ module load python/3.7
 ./src/run/select_feature_by_cv_target_tuning_fingerprint_maccs13.sh &
 ./src/run/select_feature_by_cv_target_tuning_fingerprint_maccs14.sh &
 ./src/run/select_feature_by_cv_target_tuning_fingerprint_maccs15.sh &
-./src/run/select_feature_by_cv_target_tuning_fingerprint_maccs16.sh &
-./src/run/select_feature_by_cv_target_tuning_fingerprint_maccs17.sh &
-./src/run/select_feature_by_cv_target_tuning_fingerprint_maccs18.sh &
-./src/run/select_feature_by_cv_target_tuning_fingerprint_maccs19.sh &
-./src/run/select_feature_by_cv_target_tuning_fingerprint_maccs20.sh &
