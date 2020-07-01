@@ -11,7 +11,6 @@ sys.path.insert(0, 'src/')
 import ttox_selection
 import ttox_learning
 
-argv = ['','data/compound_target_data/bindingdb_compounds_fingerprint_maccs_pKi_P47871_whole_data.tsv_train.tsv', 'data/compound_target_data/bindingdb_compounds_fingerprint_maccs_pKi_P47871_whole_data.tsv_test.tsv', '/home/yunhao1/project/chemical/data/offsides_compounds/fingerprint_combined/offsides_compounds_fingerprint_maccs.tsv', 'data/compound_target_feature_select/fingerprint_maccs/bindingdb_compounds_fingerprint_maccs_pKi_P47871_whole_data.tsv', 'pKi', '10', 'MultiSURFstar', '1', '0.1', 'regression', 'RandomForest', '20', '0.5']
 
 ## Main function 
 def main(argv):

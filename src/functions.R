@@ -69,3 +69,79 @@ generate.parallel.bash.files <- function(all_commands, N_group, job_name, folder
 	return("DONE");
 }
 
+
+## This function groups a vector by categories of its elements.
+group.vector.by.categories <- function(cate, vec){
+	# 0. Input arguments 
+		# cate: category of vectors  
+		# vec: vector
+	
+	# 1. Sort vector by order of categories
+	vec_od <- order(cate);
+	cate <- cate[vec_od];
+	vec <- vec[vec_od];
+
+	# 2. Group elements of same category together
+	# obtain unique categories
+	cate_table <- table(cate);
+	# obtain lower bound index/upper bound index of each unique category
+	lower_ids <- cumsum(cate_table);
+	upper_ids <- c(0, lower_ids[-length(lower_ids)]) + 1;
+	# return list of vectors 
+	vec_list <- mapply(function(li, ui) vec[li:ui], lower_ids, upper_ids, SIMPLIFY=F);
+	names(vec_list) <- names(cate_table);
+
+	return(vec_list);
+}
+
+
+## This function reads model performance metrics from files
+read.performance.files <- function(perf_files, perf_hyper, hyper_names){
+	## 0. Input arguments 
+		# perf_files: model performance files derived from one data file 
+		# perf_hyper: hyperparameter settings of model performance files 
+		# hyper_names: all hyperparameter settings
+
+	## 1. Read in all performance metric
+	# iterate by performance file 
+	all_perf_metric <- lapply(perf_files, function(pf){
+		# read in all the lines from a performance file 
+		metric_lines <- readLines(pf);
+		# extract metric from each line 
+		metrics <- sapply(metric_lines, function(ml){
+			ml_s <-  strsplit(ml, ": ", fixed = T)[[1]];
+			if(length(ml_s) < 2)	return('')
+			else	return(ml_s[[2]])
+		});
+		return(metrics);
+	});
+
+	## 2. Obtain metrics of model using all features 
+	all_feat_metric <- as.numeric(all_perf_metric[[1]][1:4]);
+	names(all_feat_metric) <- c("N_train", "N_test", "N_all_features", "all_features_testing");
+		 	
+	## 3. Obtain number of features selected 
+	N_select_feat <- sapply(all_perf_metric, function(apm) as.integer(apm[[6]]));	
+
+	## 4. Obtain training performance of of feature selection 
+	select_features_train <- sapply(all_perf_metric, function(apm){
+		# obtain performance of multiple runs
+		train_runs <- strsplit(apm[[7]], ",", fixed = T)[[1]];
+		train_runs <- as.numeric(train_runs);
+		# compute average of multiple runs 
+		ave_train_runs <- mean(train_runs, na.rm = T);
+		return(ave_train_runs);
+	});		
+	
+	## 5. Obtain testing performance of feature selection
+	select_features_test <- sapply(all_perf_metric, function(apm) as.numeric(apm[[8]])); 	
+
+	## 6. Output vectors 
+	N_select_feat_vec <- select_features_train_vec <- select_features_test_vec <- rep(NA, length(hyper_names));
+	names(N_select_feat_vec) <- names(select_features_train_vec) <- names(select_features_test_vec) <- hyper_names;
+	N_select_feat_vec[perf_hyper] <- N_select_feat;
+	select_features_train_vec[perf_hyper] <- select_features_train;
+	select_features_test_vec[perf_hyper] <- select_features_test;
+	
+	return(ls = list(all_features = all_feat_metric, select_features_N = N_select_feat_vec, select_features_train = select_features_train_vec, select_features_test = select_features_test_vec));
+}
