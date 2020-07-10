@@ -56,17 +56,17 @@ perf_summary_list <- mapply(function(dp, dh){
 }, data_perf, data_hyper, SIMPLIFY = F);
 # performance metrics of models dervied from all features 
 all_perf_summary <- lapply(perf_summary_list, function(psl) psl[[1]]);
-all_perf_summary_df <- data.frame(do.call(all_perf_summary, rbind));
+all_perf_summary_df <- data.frame(do.call(rbind, all_perf_summary));
 write.table(all_perf_summary_df, paste(output_folder, "_all_features_summary.tsv", sep = ""), col.names = T, row.names = T, quote = F, sep = "\t");
 # number of features of model derived from feature selection 
 select_number_summary <- lapply(perf_summary_list, function(psl) psl[[2]]);
-select_number_summary_df <- data.frame(do.call(select_number_summary, rbind));
+select_number_summary_df <- data.frame(do.call(rbind, select_number_summary));
 write.table(select_number_summary_df, paste(output_folder, "_select_features_number_summary.tsv", sep = ""), col.names = T, row.names = T, quote = F, sep = "\t");
 # cross-validation performance on training data of model derived from feature selection 
 select_train_perf_summary <- lapply(perf_summary_list, function(psl) psl[[3]]);
-select_train_perf_summary_df <- data.frame(do.call(select_train_perf_summary, 3));
+select_train_perf_summary_df <- data.frame(do.call(rbind, select_train_perf_summary));
 write.table(select_train_perf_summary_df, paste(output_folder, "_select_features_training_performance_summary.tsv", sep = ""), col.names = T, row.names = T, quote = F, sep = "\t");
 # performance on training data of model derived from feature selection 
 select_test_perf_summary <- lapply(perf_summary_list, function(psl) psl[[4]]);
-select_test_perf_summary_df <- data.frame(do.call(select_test_perf_summary, rbind));
+select_test_perf_summary_df <- data.frame(do.call(rbind, select_test_perf_summary));
 write.table(select_test_perf_summary_df, paste(output_folder, "_select_features_testing_performance_summary.tsv", sep = ""), col.names = T, row.names = T, quote = F, sep = "\t");
