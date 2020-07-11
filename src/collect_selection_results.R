@@ -1,6 +1,6 @@
 # !usr/bin/Rscript 
 # created by Yun Hao @MooreLab 2019
-# This script collects results of feature selection.
+# This script collects feature selection results from multiple datasets.
 
 
 ## functions

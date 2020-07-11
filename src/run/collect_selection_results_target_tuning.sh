@@ -1,0 +1,3 @@
+module add R
+Rscript	src/collect_selection_results.R	data/compound_target_feature_select_tuning/fingerprint_maccs/	data/compound_target_feature_select_tuning/fingerprint_maccs
+Rscript	src/collect_selection_results.R	data/compound_target_feature_select_tuning/descriptor_all/	data/compound_target_feature_select_tuning/descriptor_all
