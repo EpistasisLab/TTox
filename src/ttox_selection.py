@@ -178,3 +178,36 @@ def generate_performance_summary(N_train_instances, N_test_instances, N_all_feat
 	perf_list.append('Testing performance of model using relevant features: '+ str(round(metric_select_test, 5)))
 
 	return perf_list
+
+
+## This function finds the optimal hyperparamter setting based on model performance
+def find_optimal_hyperparameter_setting(perf_df, method):
+	## 0. Input arguments:
+		# perf_df: data frame containing model performance under different hyperparamter settings (row: dataset, column: hyperparameter)   
+		# method: metric for defining optimal hyperparamter setting: 'median' or 'mean'
+
+	## 1. Remove datasets with no selected features under some hyperparameter settings (rows with NA's values)
+	perf_df = perf_df[perf_df.isna().sum(axis = 1) == 0]
+
+	## 2. Find optimal hyperparamter setting according to specific method   
+	# based on maximum median value
+	if method == 'median':
+		optimal_hs = perf_df.median(axis = 0).sort_values(ascending = False).index[0]	
+	# based on maximum average value 
+	if method == 'mean':
+		optimal_hs = perf_df.mean(axis = 0).sort_values(ascending = False).index[0]
+
+	## 3. Build output list that contains detailed optimal hyperparameter setting 
+	optimal_hs_s = optimal_hs.split('_')
+	optimal_list = []
+	optimal_list.append('Number of folds: 10')
+	optimal_list.append('Feature ranking method: ' + optimal_hs_s[1])
+	optimal_list.append('Implement TURF: ' + optimal_hs_s[3])
+	optimal_list.append('Remove percentile: ' + optimal_hs_s[5])
+	optimal_list.append('Learning task: regression')
+	optimal_list.append('Classification/regression method: ' + optimal_hs_s[7])
+	optimal_list.append('Tolerance iterations: ' + optimal_hs_s[9])
+	optimal_list.append('Threshold of consistency ratio: ' + optimal_hs_s[11])
+	optimal_list.append('Number of repeats: 20')
+	
+	return perf_df, optimal_hs, optimal_list

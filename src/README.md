@@ -20,6 +20,10 @@
 
 + [`functions.R`](functions.R) R functions required for other R scripts in the repository.
 
++ [`analyze_selection_results.py`](analyze_selection_results.py) analyzes and visualizes the results of feature selection pipeline.  
+
++ [`ttox_plot.py`](ttox_plot.py) contains functions for visualizing feature selection results. 
+
 ## Executable shell scripts
 
 + [`run/generate_learning_data_target.sh`](run/generate_learning_data_target.sh) runs [`generate_learning_data.py`](generate_learning_data.py) on compound-target interactions data from BindingDB. [`run/generate_learning_data_toxicity.sh`](run/generate_learning_data_toxicity.sh) runs [`generate_learning_data.py`](generate_learning_data.py) on compound-toxicity data from OFFSIDES.
@@ -31,3 +35,5 @@
 + [`run/select_feature_by_cv_target_tuning_fingerprint_maccs.sh`](run/select_feature_by_cv_target_tuning_fingerprint_maccs.sh) and [`run/select_feature_by_cv_target_tuning_descriptor_all.sh`](run/select_feature_by_cv_target_tuning_descriptor_all.sh) runs [`select_feature_by_cv.py`](select_feature_by_cv.py) on two types of compound-target interaction datasets: chemical fingerprints and molecular descriptors, respectively, for the purpose of feature selection hyperparamter tuning. 
 
 + [`run/collect_selection_results_target_tuning.sh`](run/collect_selection_results_target_tuning.sh) runs [`collect_selection_results.R`](collect_selection_results.R) on compound-target interaction datasets selected for hyperparamter tuning.
+
++ [`run/analyze_selection_results_target_tuning.sh`](run/analyze_selection_results_target_tuning.sh) runs [`analyze_selection_results.py`](analyze_selection_results.py) on feature selection hyperparamter tuning results of compound-target interaction datasets. 
