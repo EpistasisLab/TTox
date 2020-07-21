@@ -21,6 +21,10 @@ def main(argv):
 		# argv 4: type of analysis task: 'tuning' for hyperparameter tuning results, 'implementation' for pipeline implementation results 
 		# argv 5: output file of analysis results
 		# argv 6: output file of visualization results 
+		# argv 7: input file that contains number of selected features of models (only needed when argv 5 == 'implementation')
+		# argv 8: threshold of tesing performance for model to be considered (only needed when argv 5 == 'implementation') 
+		# argv 9: prefix of prediction files (only needed when argv 5 == 'implementation') 
+		# argv 10: prefix of performance files (only needed when argv 5 == 'implementation') 
 		
 	## 1. Read in input performance files 
 	all_feat_test_df = pd.read_csv(argv[1], sep = '\t', header = 0, index_col = 0) 
@@ -43,7 +47,33 @@ def main(argv):
 		all_feat_test_perf = all_feat_test_df.loc[select_feat_train_df1.index, 'all_features_testing'].values
 		select_feat_test_perf = select_feat_test_df.loc[select_feat_train_df1.index, optimal_hp_col].values
 		visualize_testing = ttox_plot.visualize_testing_performance_comparison(all_feat_test_perf, select_feat_test_perf, argv[6])
-	
+
+	# analyze performance results of implementation  
+	if argv[4] == 'implementation':
+		# read in data frame that contains number of selected features of models
+		select_feat_number_df = pd.read_csv(argv[7], sep = '\t', header = 0, index_col = 0)	
+		# select the model with the best performance for each target
+		optimal_col = select_feat_test_df.columns[0] 
+		select_feat_test_df1 = ttox_selection.select_target_measurement_by_performance(select_feat_test_df, optimal_col)		
+		# visualize testing performance comparison between model using all features and optimal model built upon selected features 
+		all_feat_test_perf = all_feat_test_df.loc[select_feat_test_df1.index, 'all_features_testing'].values
+		select_feat_test_perf = select_feat_test_df1[optimal_col].values
+		visualize_testing = ttox_plot.visualize_testing_performance_comparison(all_feat_test_perf, select_feat_test_perf, argv[6])
+		# compute basic statistics of models 
+		selection_stat = ttox_selection.compute_feature_selection_statistic(all_feat_test_df.loc[select_feat_test_df1.index,], select_feat_test_df1, select_feat_number_df.loc[select_feat_test_df1.index,], optimal_col, float(argv[8]))
+		stat_file = open(argv[5] + '_auc_' + argv[8] + '_feature_selection_statistics.txt', 'w')
+		for ss in selection_stat:
+			stat_file.write('%s\n' % ss)
+		stat_file.close()
+		# collect predictions from models under the optimal hyperparameter setting and models without feature selection  
+		select_pred_df, all_pred_df = ttox_selection.collect_model_prediction(select_feat_test_df1, optimal_col, float(argv[8]), argv[9])
+		select_pred_df.to_csv(argv[5] + '_auc_' + argv[8] + '_offsides_compounds_binding_affinity_prediction_select_features.tsv', sep = '\t', float_format = '%.5f')
+		all_pred_df.to_csv(argv[5] + '_auc_' + argv[8] + '_offsides_compounds_binding_affinity_prediction_all_features.tsv', sep = '\t', float_format = '%.5f')
+		# connect targets to relevant structure features from models with best performance 
+		target_structure_df, tm_structure_df = ttox_selection.connect_structure_target(select_feat_test_df1, optimal_col, float(argv[8]), argv[10])
+		target_structure_df.to_csv(argv[5] + '_auc_' + argv[8] + '_target_structure.tsv', sep = '\t', index = False, header = False)		
+		tm_structure_df.to_csv(argv[5] + '_auc_' + argv[8] + '_target_measurement_structure.tsv', sep = '\t', index = False)  
+
 	return 1
  
 

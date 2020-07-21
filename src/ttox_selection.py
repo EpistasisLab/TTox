@@ -12,6 +12,7 @@ from skrebate import SURFstar
 from skrebate import MultiSURF
 from skrebate import MultiSURFstar
 from skrebate import TuRF
+from scipy import stats
 sys.path.insert(0, 'src/')
 import ttox_learning
 
@@ -183,10 +184,10 @@ def generate_performance_summary(N_train_instances, N_test_instances, N_all_feat
 ## This function finds the optimal hyperparamter setting based on model performance
 def find_optimal_hyperparameter_setting(perf_df, method):
 	## 0. Input arguments:
-		# perf_df: data frame containing model performance under different hyperparamter settings (row: dataset, column: hyperparameter)   
+		# perf_df: data frame containing model performance under different hyperparamter settings (row: model, column: hyperparameter)   
 		# method: metric for defining optimal hyperparamter setting: 'median' or 'mean'
 
-	## 1. Remove datasets with no selected features under some hyperparameter settings (rows with NA's values)
+	## 1. Remove models with no selected features under some hyperparameter settings (rows with NA's values)
 	perf_df = perf_df[perf_df.isna().sum(axis = 1) == 0]
 
 	## 2. Find optimal hyperparamter setting according to specific method   
@@ -211,3 +212,179 @@ def find_optimal_hyperparameter_setting(perf_df, method):
 	optimal_list.append('Number of repeats: 20')
 	
 	return perf_df, optimal_hs, optimal_list
+
+
+## This function selects measurements of targets by model performance. Each target will be assigned a single measurement-model with the best performance.  
+def select_target_measurement_by_performance(perf_df, optimal_column):
+	## 0. Input arguments:
+		# perf_df: data frame containing testing performance under different hyperparameter settings (row: model, column: hyperparameter) 
+		# optimal_column: column of perf_df that contains the results of optimal hyparameter setting  
+	
+	## 1. Remove models with no selected features under some hyperparameter settings (rows with NA's values)
+	perf_df = perf_df[perf_df.isna().sum(axis = 1) == 0]	
+
+	## 2. Obtain the intended target of each model 
+	# iterate by model
+	targets = []
+	for pdi in perf_df.index:
+		targets.append(pdi.split('_')[0])
+	# obtain the unique target set
+	uni_targets = np.unique(targets)
+	
+	## 3. Select the measurement with the best performance for each target
+	# iterate by target
+	select_row_id = [] 
+	for ut in uni_targets:
+		# find the row ID of all measurements with the intended target 
+		ut_id = [index for index, value in enumerate(targets) if value == ut] 		
+		# identify the measurement with the best performance 
+		ut_select = perf_df[optimal_column].iloc[ut_id,].idxmax(axis = 0)
+		select_row_id.append(ut_select)
+	# select the rows containing models of best performance  
+	select_perf_df = perf_df.loc[select_row_id,:]
+
+	return select_perf_df
+
+	
+## This function computes mean of an array, and confidence interval of mean by bootstrapping.
+def compute_mean_and_ci_by_bootsrap(vec, confidence_interval = 0.95, bootstrap_times = 1000):
+	## 0. Input arguments: 
+		# vec: input array 
+		# confidence_interval: confidence interval to be computed (number between 0 and 1)
+		# bootstrap_times: repeated sampling times for bootstrap
+	
+	## 1. Compute mean of array
+	vec_mean = np.mean(vec)
+        
+	## 2. Compute confidence interval of mean by bootstrapping
+	vec_len = len(vec) 
+	# Repeat boostrap process
+	sample_means = []
+	for sample in range(0, 1000):
+		# Sampling with replacement from the input array
+		sample_values = np.random.choice(vec, size = vec_len, replace = True)
+		# compute sample mean
+		sample_mean = np.mean(sample_values)
+		sample_means.append(sample_mean)
+	# sort means of bootstrap samples 
+	sample_means = np.sort(sample_means)
+	# obtain upper and lower index of confidence interval 
+	lower_id = int((0.5 - confidence_interval/2) * bootstrap_times) - 1
+	upper_id = int((0.5 + confidence_interval/2) * bootstrap_times) - 1
+
+	return vec_mean, sample_means[lower_id], sample_means[upper_id]
+
+
+## This function computes basic statistics of feature selection results
+def compute_feature_selection_statistic(all_perf_df, select_perf_df, select_number_df, optimal_column, perf_threshold):
+	## 0. Input arguments: 
+		# all_perf_df: data frame containing testing performance of models built upon all features  
+		# select_perf_df: data frame containing testing performance under different hyperparameter settings (row: model, column: hyperparameter) 
+		# select_number_df: data frame containing number of selected features under different hyperparameter 
+		# optimal_column: column of select_perf_df and select_number_df that contains the results of optimal hyparameter setting 
+		# perf_threshold: threshold of tesing performance for model to be considered 
+
+	## 1. Select rows containing models with performance better than threshold
+	select_perf_df = select_perf_df[select_perf_df[optimal_column] >= perf_threshold]
+	all_perf_df = all_perf_df.loc[select_perf_df.index, ]
+	select_number_df = select_number_df.loc[select_perf_df.index, ]
+
+	## 2. Obtain statistics of feature selection 
+	# number of models with testing performance better than the specified threshold 
+	N_models = select_perf_df.shape[0]
+	# number of all features 
+	N_all = all_perf_df['N_all_features'].values[0]
+	# average testing performance and 95% CI of models built upon all features
+	all_perf_mean, all_perf_ci_lower, all_perf_ci_upper = compute_mean_and_ci_by_bootsrap(all_perf_df['all_features_testing'].values)
+	# average number and 95% CI of models built upon selected features
+	N_select_mean, N_select_ci_lower, N_select_ci_upper = compute_mean_and_ci_by_bootsrap(select_number_df[optimal_column].values)
+	# average testing performance and 95% CI of models built upon selected features
+	select_perf_mean, select_perf_ci_lower, select_perf_ci_upper = compute_mean_and_ci_by_bootsrap(select_perf_df[optimal_column].values)
+	# p-value of two-sided Wilcoxon signed-rank test to examine whether there is a difference bewteen testing performance of models built upon all features and selected features
+	two_sided_p = stats.wilcoxon(all_perf_df['all_features_testing'].values, select_perf_df[optimal_column].values)[1]
+
+	## 3. Build output list of statistics
+	fs_stat = []
+	fs_stat.append('Number of target-models: '+ str(N_models))
+	fs_stat.append('Number of all features: ' + str(N_all))
+	fs_stat.append('Average (95% CI) performance of models built upon all features: ' + str(round(all_perf_mean, 3)) + '(' + str(round(all_perf_ci_lower, 3)) + '-' + str(round(all_perf_ci_upper, 3)) + ')')
+	fs_stat.append('Average number (95% CI) of selected features: ' + str(round(N_select_mean, 0)) + '(' + str(round(N_select_ci_lower, 0)) + '-' + str(round(N_select_ci_upper, 0)) + ')')
+	fs_stat.append('Average (95% CI) performance of models built upon selected features: ' + str(round(select_perf_mean, 3)) + '(' + str(round(select_perf_ci_lower, 3)) + '-' + str(round(select_perf_ci_upper, 3)) + ')')
+	fs_stat.append('Two-sided paired Wilcoxon signed-rank tes p-value: ' + str(two_sided_p))
+
+	return fs_stat
+
+
+## This function collects predictions from models under the optimal hyperparameter setting and models with feature selection 
+def collect_model_prediction(perf_df, optimal_column, perf_threshold, pred_folder):
+	## 0. Input arguments: 
+		# perf_df: data frame containing testing performance under different hyperparameter settings (row: model, column: hyperparameter) 
+		# optimal_column: column of perf_df that contains the results of optimal hyparameter setting  
+		# perf_threshold: threshold of tesing performance for model to be considered 
+		# pred_folder: folder of prediction files
+
+	## 1. Select rows containing models with performance better than threshold
+	perf_df = perf_df[perf_df[optimal_column] >= perf_threshold]
+	
+	## 2. Collect the prediction of models under optimal hyperparameter setting
+	# iterate by model 
+	hp_pred_list = []
+	all_pred_list = []
+	targets = []
+	for pdi in perf_df.index:
+		# obtain the name of prediction file  
+		pdi_target = pdi.split('_')[0]
+		pdi_measure = pdi.split('_')[1]
+		pdi_pred_file = pred_folder + '_' + pdi_measure + '_' + pdi_target + '_whole_data.tsv_fd_10_' + optimal_column + '_nr_20_prediction.tsv'
+		targets.append(pdi_target)
+		# read in the prediction of models and select the column of interest 
+		pdi_pred_df = pd.read_csv(pdi_pred_file, sep = '\t', header = 0, index_col = 0)				
+		# obtain prediction from model with feature selection 
+		hp_pred_list.append(pdi_pred_df['select_features_pred']) 
+		# obtain prediction from model without feature selection 
+		all_pred_list.append(pdi_pred_df['all_features_pred'])
+	# aggregate prediction results of all models 
+	hp_pred_df = pd.concat(hp_pred_list, axis = 1)
+	hp_pred_df.columns = targets
+	all_pred_df = pd.concat(all_pred_list, axis = 1)
+	all_pred_df.columns = targets	
+
+	return hp_pred_df, all_pred_df
+
+
+## This function connects targets to relevant structure features from models with best performance 
+def connect_structure_target(perf_df, optimal_column, perf_threshold, perf_folder):
+	## 0. Input arguments: 
+		# perf_df: data frame containing testing performance under different hyperparameter settings (row: model, column: hyperparameter) 
+		# optimal_column: column of perf_df that contains the results of optimal hyparameter setting  
+		# perf_threshold: threshold of tesing performance for model to be considered  
+		# perf_folder: folder of performance files
+
+	## 1. Select rows containing models with performance better than threshold 
+	perf_df = perf_df[perf_df[optimal_column] >= perf_threshold]
+			
+	## 2. Collect the prediction of models under optimal hyperparameter setting
+	# iterate by model 
+	selected_features = []
+	targets = []
+	for pdi in perf_df.index:
+		# obtain the name of performance file 
+		pdi_target = pdi.split('_')[0]
+		pdi_measure = pdi.split('_')[1] 
+		pdi_perf_file = perf_folder + '_' + pdi_measure + '_' + pdi_target + '_whole_data.tsv_fd_10_' + optimal_column + '_nr_20_performance.txt'
+		targets.append(pdi_target)
+		# read in the performance file  
+		pdi_perf_file_read = open(pdi_perf_file, 'r')
+		for line in pdi_perf_file_read:
+			line = line.strip()
+			# find the line that contains relevant features
+			if line.startswith('Relevant features: '):
+				# obtain relevant features 
+				features = line.split('Relevant features: ')[1]
+				selected_features.append(features)
+		pdi_perf_file_read.close()
+	# output target-feature reletionships in data frame format  
+	target_structure_df = pd.DataFrame({'target': targets, 'structure_features': selected_features})
+	tm_structure_df = pd.DataFrame({'target_measurement': perf_df.index, 'structure_features': selected_features})
+	
+	return	target_structure_df, tm_structure_df
