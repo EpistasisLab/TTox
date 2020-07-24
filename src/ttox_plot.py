@@ -160,8 +160,8 @@ def visualize_similarity_density_comparison(sim_dict, bg_sim, plot_file):
 	plt.rc('font', size = 30)
 	plt.rc('axes', titlesize = 30)
 	plt.rc('axes', labelsize = 30)
-	plt.rc('xtick', labelsize = 20)
-	plt.rc('ytick', labelsize = 20)
+	plt.rc('xtick', labelsize = 15)
+	plt.rc('ytick', labelsize = 15)
 	plt.rc('legend', fontsize = 15)
 	# include background distribution in the dictionary
 	sim_dict['background'] = bg_sim
