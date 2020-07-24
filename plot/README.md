@@ -2,8 +2,41 @@
 
 ## Compound-toxicity datasets
 
-+ [`compound_toxicity_data_similarity/`](compound_toxicity_data_similarity/) contains boxplots that compare different types of pairwise similarity between compounds. Four types of pairwise similarity were compared: i) compounds within whole dataset ('all vs all'), ii) compounds within training set ('train vs train'), iii) compounds within testing set ('test vs test'), and iv) between compounds in testing set and compounds in training set ('test vs train'). Two types of similarity metrics were adpoted: i) maximum Tanimoto Coefficient across all possible pairs ('Maximum similarity'), ii) average Tanimoto Coefficient across all possible pairs ('Average similarity'). 
++ [`compound_toxicity_data_similarity/`](compound_toxicity_data_similarity/) contains boxplots that compare different types of pairwise similarity between compounds.
+  + Four types of pairwise similarity were compared: 
+    + compounds within whole dataset ('all vs all')
+    + compounds within training set ('train vs train')
+    + compounds within testing set ('test vs test')
+    + between compounds in testing set and compounds in training set ('test vs train')
+  + Two types of similarity metrics were adpoted:
+    + maximum Tanimoto Coefficient across all possible pairs ('Maximum similarity')
+    + average Tanimoto Coefficient across all possible pairs ('Average similarity')
 
-+ [`compound_target_feature_select_tuning/`](compound_target_feature_select_tuning/) contains visualization results of feature selection hyperparameter tuning on compound-target iteraction datasets. Two types of compound-target datasets were included: datasets with molecular descriptor features (file name that starts with 'descriptor_all') and datasets with MACCS fingerprints features (file name that starts with 'fingerprint_maccs'). Two types of visualization results were included: i) boxplot that compares model performance of different hyperparamter settings (file name that ends with 'compare.pdf'. Note: only one hyperparameteris compared in each file. Model performance shown in two adjacent boxes have the same setting except one hyperparameter.), and ii) scatter plot compare testing performance of selected features with testing performance of all features (file name that starts with '_testing_performance_compared.pdf').  
++ [`compound_target_feature_select_tuning/`](compound_target_feature_select_tuning/) contains visualization results of feature selection hyperparameter tuning on compound-target iteraction datasets. 
+  + Two types of compound-target datasets were included:
+    + datasets with molecular descriptor features (file name that starts with 'descriptor_all')
+    + datasets with MACCS fingerprints features (file name that starts with 'fingerprint_maccs') 
+  + Two types of visualization results were included:
+    + boxplot that compares model performance of different hyperparamter settings (file name that ends with 'compare.pdf'. Note: only one hyperparameteris compared in each file. Model performance shown in two adjacent boxes have the same setting except one hyperparameter.)
+    + scatter plot compare testing performance of selected features with testing performance of all features (file name that starts with '_testing_performance_compared.pdf') 
 
-+ [`compound_target_feature_select_implementation/`](compound_target_feature_select_implementation/) contains visualization results of feature selection pipeline implementation on all compound-target iteraction datasets. Two types of compound-target datasets were analyzed: datasets with molecular descriptor features ([`compound_target_feature_select_implementation/descriptor_all_analysis/`](compound_target_feature_select_implementation/descriptor_all_analysis/)) and datasets with MACCS fingerprints features ([`compound_target_feature_select_implementation/fingerprint_maccs_analysis/`](compound_target_feature_select_implementation/fingerprint_maccs_analysis/)). The naming scheme of files is the same as files in [`compound_target_feature_select_tuning/`](compound_target_feature_select_tuning/). 
++ [`compound_target_feature_select_implementation/`](compound_target_feature_select_implementation/) contains visualization results of feature selection pipeline implementation on all compound-target iteraction datasets. The naming scheme of files is the same as files in [`compound_target_feature_select_tuning/`](compound_target_feature_select_tuning/).
+  + Two types of compound-target datasets were analyzed: 
+    + datasets with molecular descriptor features ([`compound_target_feature_select_implementation/descriptor_all_analysis/`](compound_target_feature_select_implementation/descriptor_all_analysis/))
+    + datasets with MACCS fingerprints features ([`compound_target_feature_select_implementation/fingerprint_maccs_analysis/`](compound_target_feature_select_implementation/fingerprint_maccs_analysis/))
+
++ [`compound_target_feature_select_implementation/`](compound_target_feature_select_implementation/) also contains visualization results of feature similarity analysis among feature selection-derived models. 
+  + Two types of models were analyzed:
+    + models built upon datasets with molecular descriptor features ([`compound_target_feature_select_implementation/descriptor_all_compare/`](compound_target_feature_select_implementation/descriptor_all_compare/))
+    + models built upon datasets with MACCS fingerprints features ([`compound_target_feature_select_implementation/fingerprint_maccs_compare/`](compound_target_feature_select_implementation/fingerprint_maccs_compare/))
+  + Two types of visualization results were included:
+    + density plot that compares the distribution of pairwise similarity scores among models of different classes (file name that ends with 'boxplot.pdf')
+    + boxplot that compares the distribution of pairwise similarity scores among models of different classes (file name that ends with 'boxplot.pdf')
+  + Models were grouped into different classes by two standards: 
+    + unit that compound-target binding was measured in (file name that contains 'measure')
+    + functional class that target belongs to (file name that contains 'function')
+  + Four different thresholds of testing performance (measured by R squared) were applied to choose models:
+    + 0 (file name that contains 'auc_0')
+    + 0.25 (file name that contains 'auc_0.25')
+    + 0.5 (file name that contains 'auc_0.5')
+    + 0.75 (file name that contains 'auc_0.75')

@@ -2,11 +2,64 @@
 
 ## Compound-toxicity datasets
 
-+ [`compound_toxicity_data/`](compound_toxicity_data/) contains generated structure property-toxicity outcome datasets for machine learning task. Four types of organ toxicity were included: cardiac, hepatic, pulmonary, and renal. Two types of structure properties were included: molecular descriptors (file name that contains 'descriptor_all') and MACCS fingerprints (file name that contains 'fingerprint_maccs'). Three types of data were generated: i) whole dataset (file name that ends with 'whole_data.tsv'), ii) dataset for training purpose (file name that ends with 'train.tsv'), and iii) dataset for testing purpose (file name that ends with 'test.tsv'). A brief summary of the datasets can be found [here](compound_toxicity_data/offsides_compounds_descriptor_all_toxicity_whole_data_summary.tsv) and [here](compound_toxicity_data/offsides_compounds_fingerprint_maccs_toxicity_whole_data_summary.tsv).
++ [`compound_toxicity_data/`](compound_toxicity_data/) contains generated structure property-toxicity outcome datasets for machine learning task. 
+  + Four types of organ toxicity were included: 
+    + cardiac
+    + hepatic
+    + pulmonary
+    + renal 
+  + Two types of structure properties were included:
+    + molecular descriptors (file name that contains 'descriptor_all')
+    + MACCS fingerprints (file name that contains 'fingerprint_maccs') 
+  + Three types of data were generated:
+    + whole dataset (file name that ends with 'whole_data.tsv')
+    + dataset for training purpose (file name that ends with 'train.tsv')
+    + dataset for testing purpose (file name that ends with 'test.tsv')
+  + A brief summary of the datasets can be found [here](compound_toxicity_data/offsides_compounds_descriptor_all_toxicity_whole_data_summary.tsv) and [here](compound_toxicity_data/offsides_compounds_fingerprint_maccs_toxicity_whole_data_summary.tsv).
 
-+ [`compound_toxicity_data_similarity/`](compound_toxicity_data_similarity/) contains computed structure similarity results between compounds. Four types of pairwise similarity were computed: i) compounds within whole dataset, ii) compounds within training set, iii) compounds within testing set, and iv) between compounds in testing set and compounds in training set. Two types of similarity metrics were adpoted: i) maximum Tanimoto Coefficient across all possible pairs ('max_tc'), ii) average Tanimoto Coefficient across all possible pairs ('mean_tc').  
++ [`compound_toxicity_data_similarity/`](compound_toxicity_data_similarity/) contains computed structure similarity results between compounds.
+  + Four types of pairwise similarity were computed:
+    + compounds within whole dataset
+    + compounds within training set
+    + compounds within testing set
+    + between compounds in testing set and compounds in training set
+  + Two types of similarity metrics were adpoted:
+    + maximum Tanimoto Coefficient across all possible pairs ('max_tc')
+    + average Tanimoto Coefficient across all possible pairs ('mean_tc') 
 
-+ [`compound_target_feature_select_tuning/`](compound_target_feature_select_tuning/) contains collected feature selection results from datasets for hyperparameter tuning. Two types of compound-target datasets were included: datasets with molecular descriptor features (file name that starts with 'descriptor_all') and datasets with MACCS fingerprints features (file name that starts with 'fingerprint_maccs'). Five types of results were included: i) selected datasets for hyperparameter tuning (file name that ends with 'sample_files.txt'), ii) number of selected features (file name that ends with 'number_summary.tsv'), iii) training performance of models built upon selected features (file name that ends with 'training_performance_summary.tsv.tsv'), iv) testing performance of models built upon selected features (file name that ends with 'testing_performance_summary.tsv.tsv'), and v) baseline performance of models built upon all features (file name that ends with 'all_features_summary.tsv'). The folder also contains the analysis results of optimal hyperparameter settings for feature selection (file name that ends with '_optimal_hyperparameters.txt'). 
++ [`compound_target_feature_select_tuning/`](compound_target_feature_select_tuning/) contains collected feature selection results from datasets for hyperparameter tuning. 
+  + Two types of compound-target datasets were included:
+    + datasets with molecular descriptor features (file name that starts with 'descriptor_all')
+    + datasets with MACCS fingerprints features (file name that starts with 'fingerprint_maccs')
+  + Five types of results were included:
+    + selected datasets for hyperparameter tuning (file name that ends with 'sample_files.txt')
+    + number of selected features (file name that ends with 'number_summary.tsv')
+    + training performance of models built upon selected features (file name that ends with 'training_performance_summary.tsv.tsv')
+    + testing performance of models built upon selected features (file name that ends with 'testing_performance_summary.tsv.tsv')
+    + baseline performance of models built upon all features (file name that ends with 'all_features_summary.tsv')
+  + The folder also contains the analysis results of optimal hyperparameter settings for feature selection (file name that ends with '_optimal_hyperparameters.txt')
 
 + [`compound_target_feature_select_implementation/`](compound_target_feature_select_implementation/) contains collected feature selection pipeline implementation results from all datasets. The naming scheme of result files is the same as files in [`compound_target_feature_select_tuning/`](compound_target_feature_select_tuning/). 
-It also contains analysis results of feature selection pipeline implementation. Two types of compound-target datasets were analyzed: datasets with molecular descriptor features ([`compound_target_feature_select_implementation/descriptor_all_analysis/`](compound_target_feature_select_implementation/descriptor_all_analysis/)) and datasets with MACCS fingerprints features ([`compound_target_feature_select_implementation/fingerprint_maccs_analysis/`](compound_target_feature_select_implementation/fingerprint_maccs_analysis/)). Five types of analysis results were included: i) basic statistics of feature selection models (file name that ends with '_feature_selection_statistics.txt'), ii) prediction results of unseen data using built upon all features (file name that ends with 'prediction_all_features.tsv'), iii) prediction results of unseen data using built upon selected features (file name that ends with 'prediction_select_features.tsv'), iv) identified structure feature-target relationships (file name that ends with 'target_structure.tsv'), and v) identified structure feature-target-measurement relationships (file name that ends with 'target_measurement_structure.tsv').
+
++ [`compound_target_feature_select_implementation/`](compound_target_feature_select_implementation/) also contains analysis results of feature selection pipeline implementation. 
+  + Two types of compound-target datasets were analyzed:
+    + datasets with molecular descriptor features ([`compound_target_feature_select_implementation/descriptor_all_analysis/`](compound_target_feature_select_implementation/descriptor_all_analysis/))
+    + datasets with MACCS fingerprints features ([`compound_target_feature_select_implementation/fingerprint_maccs_analysis/`](compound_target_feature_select_implementation/fingerprint_maccs_analysis/)) 
+  + Five types of analysis results were included: 
+    + basic statistics of feature selection models (file name that ends with '_feature_selection_statistics.txt')
+    + prediction results of unseen data using built upon all features (file name that ends with 'prediction_all_features.tsv')
+    + prediction results of unseen data using built upon selected features (file name that ends with 'prediction_select_features.tsv')
+    + identified structure feature-target relationships (file name that ends with 'target_structure.tsv')
+    + identified structure feature-target-measurement relationships (file name that ends with 'target_measurement_structure.tsv')
+
++ [`compound_target_feature_select_implementation/`](compound_target_feature_select_implementation/) also contains computed pairwise similarity scores of selected relevant features among different models. 
+  + Two types of models were analyzed:
+    + models built upon datasets with molecular descriptor features ([`compound_target_feature_select_implementation/descriptor_all_compare/`](compound_target_feature_select_implementation/descriptor_all_compare/))
+    + models built upon datasets with MACCS fingerprints features ([`compound_target_feature_select_implementation/fingerprint_maccs_compare/`](compound_target_feature_select_implementation/fingerprint_maccs_compare/)) 
+  + Four different thresholds of testing performance (measured by R squared) were applied to choose models: 
+    + 0 (file name that contains 'auc_0')
+    + 0.25 (file name that contains 'auc_0.25')
+    + 0.5 (file name that contains 'auc_0.5')
+    + 0.75 (file name that contains 'auc_0.75')
+   
+

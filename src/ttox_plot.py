@@ -122,3 +122,64 @@ def visualize_testing_performance_comparison(baseline_perf, model_perf, output_f
 	plt.close()
 
 	return 1
+
+
+## This function visualizes density comparison of pairwise similarity scores among distinct classes  
+def visualize_similarity_density_comparison(sim_dict, bg_sim, plot_file):
+	## 0. Input arguments:
+		# sim_dict: dictionary that contains the pairwise similarity scores among each class
+		# bg_sim: array that contains the background pairwise similarity scores
+		# plot_file: prefix of output plotting file 
+
+	## 1. Make density plot 
+	# specify figure and font size of density plot 
+	plt.figure(figsize = (10, 10)) 
+	plt.rc('font', size = 30)
+	plt.rc('axes', titlesize = 30)
+	plt.rc('axes', labelsize = 30)
+	plt.rc('xtick', labelsize = 30)
+	plt.rc('ytick', labelsize = 30)
+	plt.rc('legend', fontsize = 15)
+	# plot density of each class distribution 
+	for key, value in sim_dict.items():  
+		sns.distplot(value, hist = False, kde = True, kde_kws = {'linewidth': 3},  label = key)	
+	# plot density of background distribution 
+	sns.distplot(bg_sim, hist = False, kde = True, kde_kws = {'linewidth': 3},  label = 'background')
+	# add labels and legends
+	plt.xlabel('Jaccard Index')
+	plt.ylabel('Density')
+	plt.legend(loc = 'upper right')
+	# save density plot
+	plt.tight_layout()
+	plt.savefig(plot_file + '_density.pdf')
+	plt.close()
+
+	## 2. Make boxplot
+	# specify figure and font size of density plot 
+	plt.figure(figsize = (15, 10))
+	plt.rc('font', size = 30)
+	plt.rc('axes', titlesize = 30)
+	plt.rc('axes', labelsize = 30)
+	plt.rc('xtick', labelsize = 20)
+	plt.rc('ytick', labelsize = 20)
+	plt.rc('legend', fontsize = 15)
+	# include background distribution in the dictionary
+	sim_dict['background'] = bg_sim
+	class_labels, class_data = sim_dict.keys(), sim_dict.values()
+	# separate words with '\n' to create new labels 
+	class_labels1 = []
+	for cl in class_labels:
+		cl_s = cl.split(' ')
+		class_labels1.append('\n'.join(cl_s))
+	# plot distribution of each class in box 
+	plt.boxplot(class_data, showfliers = False)
+	plt.xticks(range(1, len(class_labels1) + 1), class_labels1)
+	# add labels and legends
+	plt.xlabel('Target class')
+	plt.ylabel('Jaccard Index')
+	# save density plot
+	plt.tight_layout()
+	plt.savefig(plot_file + '_boxplot.pdf')
+	plt.close() 
+
+	return 1
