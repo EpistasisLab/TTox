@@ -2,7 +2,7 @@
 
 ## Compound structure-toxicity datasets
 
-+ [`compound_structure_toxicity_data/`](compound_structure_toxicity_data/) contains generated compound structure property-toxicity outcome datasets for machine learning task. 
++ [`compound_structure_toxicity_data/`](compound_structure_toxicity_data/) contains generated compound structure-toxicity outcome datasets for machine learning task. 
   + Four types of organ toxicity were included: 
     + cardiac
     + hepatic
@@ -64,4 +64,10 @@
     + 0.5 (file name that contains 'auc_0.5')
     + 0.75 (file name that contains 'auc_0.75')
    
+## Compound target-toxicity outcome datasets
 
++ [`compound_target_toxicity_data/`](compound_target_toxicity_data/) contains generated compound target-toxicity outcome datasets for machine learning task. The naming scheme of result files is the same as files in [`compound_structure_toxicity_data/`](compound_structure_toxicity_data/). In addition, four types of target sets were used as features in all the datasets:
+    + targets from binding prediction models with testing performance greater than 0 (file name that contains 'auc_0')
+    + targets from binding prediction models with testing performance greater than 0.25 (file name that contains 'auc_0.25')
+    + targets from binding prediction models with testing performance greater than 0.5 (file name that contains 'auc_0.5')
+    + targets from binding prediction models with testing performance greater than 0.75 (file name that contains 'auc_0.75') 

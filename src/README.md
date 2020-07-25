@@ -28,7 +28,7 @@
 
 ## Executable shell scripts
 
-+ [`run/generate_learning_data_compound_structure_target.sh`](run/generate_learning_data_compound_structure_target.sh) runs [`generate_learning_data.py`](generate_learning_data.py) on compound structure-target binding datasets from BindingDB. [`run/generate_learning_data_compound_structure_toxicity.sh`](run/generate_learning_data_compound_structure_toxicity.sh) runs [`generate_learning_data.py`](generate_learning_data.py) on compound structure-toxicity data from OFFSIDES.
++ [`run/generate_learning_data_compound_structure_target.sh`](run/generate_learning_data_compound_structure_target.sh) runs [`generate_learning_data.py`](generate_learning_data.py) on compound-target interaction datasets from BindingDB and structure features of compounds. [`run/generate_learning_data_compound_structure_toxicity.sh`](run/generate_learning_data_compound_structure_toxicity.sh) runs [`generate_learning_data.py`](generate_learning_data.py) on compound-toxicity relationship data from OFFSIDES and structure features of compounds. [`run/generate_learning_data_compound_target_toxicity.sh`](run/generate_learning_data_compound_target_toxicity.sh) runs [`generate_learning_data.py`](generate_learning_data.py) on compound-toxicity relationship data from OFFSIDES and target features of compounds.
 
 + [`run/compare_train_test_similarity_offsides.sh`](run/compare_train_test_similarity_offsides.sh) runs [`compare_train_test_similarity.py`](compare_train_test_similarity.py) on generated compound structure-toxicity data of OFFSIDES compounds.
 
