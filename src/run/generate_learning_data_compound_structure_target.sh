@@ -1,4 +1,4 @@
-module add python/3.8
+module add python/3.7
 python	src/generate_learning_data.py	https://raw.githubusercontent.com/yhao-compbio/chemical/master/data/bindingdb_targets/bindingdb_human_targets_pEC50.tsv	/home/yunhao1/project/chemical/data/bindingdb_compounds/fingerprint_combined/bindingdb_compounds_fingerprint_maccs.tsv	data/compound_target_data/bindingdb_compounds_fingerprint_maccs_pEC50	50	0.2
 python	src/generate_learning_data.py	https://raw.githubusercontent.com/yhao-compbio/chemical/master/data/bindingdb_targets/bindingdb_human_targets_pEC50.tsv	/home/yunhao1/project/chemical/data/bindingdb_compounds/descriptor_combined/bindingdb_compounds_descriptor_all.tsv	data/compound_target_data/bindingdb_compounds_descriptor_all_pEC50	50	0.2
 python	src/generate_learning_data.py	https://raw.githubusercontent.com/yhao-compbio/chemical/master/data/bindingdb_targets/bindingdb_human_targets_pIC50.tsv	/home/yunhao1/project/chemical/data/bindingdb_compounds/fingerprint_combined/bindingdb_compounds_fingerprint_maccs.tsv	data/compound_target_data/bindingdb_compounds_fingerprint_maccs_pIC50	50	0.2

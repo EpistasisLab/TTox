@@ -62,7 +62,7 @@ def split_dataset_into_train_test(data_df, label, test_prop, output_pf):
 def generate_learning_dataset(relation_file, feature_file, min_N_sample, test_proportion, output_folder):
 	## 0. Input argments:
 		# relation_file: input file that contains group-sample relationships (three columns, 1: group, 2: sample, 3: label) 
-		# feature_file: input file that contains computed features of samples 
+		# feature_file: input file that contains computed features of samples
 		# min_N_sample: minimum number of samples required 
 		# test_proportion: proportion of test data   
 		# output_folder: folder to store the output files 
@@ -80,7 +80,7 @@ def generate_learning_dataset(relation_file, feature_file, min_N_sample, test_pr
 
 	## 2. Obtain feature data
 	# read in input file 
-	feature_df = pd.read_csv(feature_file, sep = '\t', header = 0)
+	feature_df = pd.read_csv(feature_file, sep = '\t', header = 0, index_col = 0)
 	# obtain sample names
 	feature_samples = feature_df.index
 
