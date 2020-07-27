@@ -61,18 +61,18 @@ def main(argv):
 		visualize_testing = ttox_plot.visualize_testing_performance_comparison(all_feat_test_perf, select_feat_test_perf, argv[6])
 		# compute basic statistics of models 
 		selection_stat = ttox_selection.compute_feature_selection_statistic(all_feat_test_df.loc[select_feat_test_df1.index,], select_feat_test_df1, select_feat_number_df.loc[select_feat_test_df1.index,], optimal_col, float(argv[8]))
-		stat_file = open(argv[5] + '_auc_' + argv[8] + '_feature_selection_statistics.txt', 'w')
+		stat_file = open(argv[5] + '_mc_' + argv[8] + '_feature_selection_statistics.txt', 'w')
 		for ss in selection_stat:
 			stat_file.write('%s\n' % ss)
 		stat_file.close()
 		# collect predictions from models under the optimal hyperparameter setting and models without feature selection  
 		select_pred_df, all_pred_df = ttox_selection.collect_model_prediction(select_feat_test_df1, optimal_col, float(argv[8]), argv[9])
-		select_pred_df.to_csv(argv[5] + '_auc_' + argv[8] + '_offsides_compounds_binding_affinity_prediction_select_features.tsv', sep = '\t', float_format = '%.5f')
-		all_pred_df.to_csv(argv[5] + '_auc_' + argv[8] + '_offsides_compounds_binding_affinity_prediction_all_features.tsv', sep = '\t', float_format = '%.5f')
+		select_pred_df.to_csv(argv[5] + '_mc_' + argv[8] + '_offsides_compounds_binding_affinity_prediction_select_features.tsv', sep = '\t', float_format = '%.5f')
+		all_pred_df.to_csv(argv[5] + '_mc_' + argv[8] + '_offsides_compounds_binding_affinity_prediction_all_features.tsv', sep = '\t', float_format = '%.5f')
 		# connect targets to relevant structure features from models with best performance 
 		target_structure_df, tm_structure_df = ttox_selection.connect_structure_target(select_feat_test_df1, optimal_col, float(argv[8]), argv[10])
-		target_structure_df.to_csv(argv[5] + '_auc_' + argv[8] + '_target_structure.tsv', sep = '\t', index = False, header = False)		
-		tm_structure_df.to_csv(argv[5] + '_auc_' + argv[8] + '_target_measurement_structure.tsv', sep = '\t', index = False)  
+		target_structure_df.to_csv(argv[5] + '_mc_' + argv[8] + '_target_structure.tsv', sep = '\t', index = False, header = False)		
+		tm_structure_df.to_csv(argv[5] + '_mc_' + argv[8] + '_target_measurement_structure.tsv', sep = '\t', index = False)  
 
 	return 1
  

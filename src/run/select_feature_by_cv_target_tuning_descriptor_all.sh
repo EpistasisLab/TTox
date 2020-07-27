@@ -7,7 +7,7 @@
 #BSUB -N
 
 module unload python
-module load python/3.7
+module load python/3.8
 
 ./src/run/select_feature_by_cv_target_tuning_descriptor_all1.sh &
 ./src/run/select_feature_by_cv_target_tuning_descriptor_all2.sh &

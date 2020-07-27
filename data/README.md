@@ -59,15 +59,15 @@
     + models built upon datasets with molecular descriptor features ([`compound_target_feature_select_implementation/descriptor_all_compare/`](compound_target_feature_select_implementation/descriptor_all_compare/))
     + models built upon datasets with MACCS fingerprints features ([`compound_target_feature_select_implementation/fingerprint_maccs_compare/`](compound_target_feature_select_implementation/fingerprint_maccs_compare/)) 
   + Four different thresholds of testing performance (measured by R squared) were applied to choose models: 
-    + 0 (file name that contains 'auc_0')
-    + 0.25 (file name that contains 'auc_0.25')
-    + 0.5 (file name that contains 'auc_0.5')
-    + 0.75 (file name that contains 'auc_0.75')
+    + 0 (file name that contains 'mc_0')
+    + 0.25 (file name that contains 'mc_0.25')
+    + 0.5 (file name that contains 'mc_0.5')
+    + 0.75 (file name that contains 'mc_0.75')
    
 ## Compound target-toxicity outcome datasets
 
 + [`compound_target_toxicity_data/`](compound_target_toxicity_data/) contains generated compound target-toxicity outcome datasets for machine learning task. The naming scheme of result files is the same as files in [`compound_structure_toxicity_data/`](compound_structure_toxicity_data/). In addition, four types of target sets were used as features in all the datasets:
-    + targets from binding prediction models with testing performance greater than 0 (file name that contains 'auc_0')
-    + targets from binding prediction models with testing performance greater than 0.25 (file name that contains 'auc_0.25')
-    + targets from binding prediction models with testing performance greater than 0.5 (file name that contains 'auc_0.5')
-    + targets from binding prediction models with testing performance greater than 0.75 (file name that contains 'auc_0.75') 
+    + targets from binding prediction models with testing performance greater than 0 (file name that contains 'mc_0')
+    + targets from binding prediction models with testing performance greater than 0.25 (file name that contains 'mc_0.25')
+    + targets from binding prediction models with testing performance greater than 0.5 (file name that contains 'mc_0.5')
+    + targets from binding prediction models with testing performance greater than 0.75 (file name that contains 'mc_0.75') 

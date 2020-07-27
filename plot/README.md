@@ -38,7 +38,7 @@
     + unit that compound-target binding was measured in (file name that contains 'measure')
     + functional class that target belongs to (file name that contains 'function')
   + Four different thresholds of testing performance (measured by R squared) were applied to choose models:
-    + 0 (file name that contains 'auc_0')
-    + 0.25 (file name that contains 'auc_0.25')
-    + 0.5 (file name that contains 'auc_0.5')
-    + 0.75 (file name that contains 'auc_0.75')
+    + 0 (file name that contains 'mc_0')
+    + 0.25 (file name that contains 'mc_0.25')
+    + 0.5 (file name that contains 'mc_0.5')
+    + 0.75 (file name that contains 'mc_0.75')
