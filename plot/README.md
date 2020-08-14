@@ -31,9 +31,10 @@
   + Two types of models were analyzed:
     + models built upon datasets with molecular descriptor features ([`compound_target_feature_select_implementation/descriptor_all_compare/`](compound_target_feature_select_implementation/descriptor_all_compare/))
     + models built upon datasets with MACCS fingerprints features ([`compound_target_feature_select_implementation/fingerprint_maccs_compare/`](compound_target_feature_select_implementation/fingerprint_maccs_compare/))
-  + Two types of visualization results were included:
-    + density plot that compares the distribution of pairwise similarity scores among models of different classes (file name that ends with 'boxplot.pdf')
-    + boxplot that compares the distribution of pairwise similarity scores among models of different classes (file name that ends with 'boxplot.pdf')
+  + Three types of visualization results were included:
+    + boxplot that compares the intragroup/intergroup distribution of pairwise similarity scores among models of different classes (file name that ends with 'similarity_boxplot.pdf')
+    + boxplot that compares the distribution of testing performance across models of different protein function class (file name that ends with "by_class.pdf")
+    + boxplot that compares the distribution of testing performance across models of measurement types (file name that ends with "by_measure.pdf")	
   + Models were grouped into different classes by two standards: 
     + unit that compound-target binding was measured in (file name that contains 'measure')
     + functional class that target belongs to (file name that contains 'function')

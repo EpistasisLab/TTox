@@ -4,8 +4,11 @@
 
 
 ## Module
+import sys
 import numpy as np
 import pandas as pd
+sys.path.insert(0, 'src/')
+import ttox_selection
 
 
 ## This function computes Tanimoto Coefficient between two sets of chemical fingerprints 
@@ -145,9 +148,11 @@ def group_pairwise_similarity_by_class(pw_sim, index_class):
 	## 1. Obtain set of unique classes
 	N_index = len(index_class)
 	index_class_set = set(index_class)	
+	all_ids = np.arange(0, len(pw_sim))
 
 	## 2. Group pairwise similarity by class 
-	class_sim_dict = {}
+	class_sim_list = [] 
+	class_sim_pv = {}
 	# iterate by unique class 
 	for ics in index_class_set:
 		# find all indices of models that belong to the class  
@@ -155,13 +160,30 @@ def group_pairwise_similarity_by_class(pw_sim, index_class):
 		N_ics = len(ics_id)
 		if N_ics > 1:
 			# find indices of model pairs that both belong to the class 
-			class_sim_dict[ics] = []
+			intragroup_ids = [] 
+			intergroup_ids = []
 			for ii in range(0, N_ics-1):
 				ii_id = ics_id[ii]
+				lower_id = int((2 * N_index - 1 - ii_id) * ii_id/2)
+				upper_id = int((2 * N_index - 1 - ii_id) * ii_id/2 + N_index - ii_id - 1)
+				ii_inter_ids = np.arange(lower_id, upper_id)
 				for ij in range(ii+1, N_ics):
 					ij_id = ics_id[ij]		
-					pair_id = int((2 * N_index - 1 - ii_id) * ii_id/2 + ij_id - ii_id - 1)
-					# Add similarity scores of the identified pairs to the output dictionary 
-					class_sim_dict[ics].append(pw_sim[pair_id])
-
-	return class_sim_dict
+					pair_id = int(lower_id + ij_id - ii_id - 1)
+					intragroup_ids.append(pair_id)
+					ii_inter_ids = np.setdiff1d(ii_inter_ids, pair_id)
+				intergroup_ids.append(ii_inter_ids)
+			# find indices of model pairs that one belongs to the class, one does not   
+			intergroup_ids = np.concatenate(intergroup_ids)
+			# build data frame that contains intragroup feature similarity
+			intragroup_df = pd.DataFrame({'similarity': pw_sim[intragroup_ids], 'class': np.repeat(ics, len(intragroup_ids)), 'group': np.repeat('intragroup', len(intragroup_ids))})
+			class_sim_list.append(intragroup_df)
+			# build data frame that contains intergroup feature similarity
+			intergroup_df = pd.DataFrame({'similarity': pw_sim[intergroup_ids], 'class': np.repeat(ics, len(intergroup_ids)), 'group': np.repeat('intergroup', len(intergroup_ids))})		
+			class_sim_list.append(intergroup_df)
+			# compare intragroup feature similarity to intergroup feature similarity by Mann-Whitney U test 
+			class_sim_pv[ics] = ttox_selection.compare_sample_means_by_one_sided_test(pw_sim[intragroup_ids], pw_sim[intergroup_ids], False, False)
+	# combine all data frames from different classes 	
+	class_sim_df = pd.concat(class_sim_list, axis = 0)			
+	 
+	return class_sim_df, class_sim_pv

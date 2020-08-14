@@ -1,6 +1,6 @@
 Number of target-models: 75
 Number of all features: 166
-Average (95% CI) performance of models built upon all features: 0.815(0.797-0.83)
-Average number (95% CI) of selected features: 52.0(45.0-59.0)
+Average (95% CI) performance of models built upon all features: 0.815(0.797-0.832)
+Average number (95% CI) of selected features: 52.0(45.0-60.0)
 Average (95% CI) performance of models built upon selected features: 0.823(0.811-0.835)
-Two-sided paired Wilcoxon signed-rank tes p-value: 0.9705137915350033
+One-sided paired Wilcoxon signed-rank test p-value: 0.48525689576750164

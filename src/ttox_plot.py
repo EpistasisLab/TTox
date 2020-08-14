@@ -3,11 +3,13 @@
 
 
 # Module
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import seaborn as sns
+from scipy import stats
 
 
 ## This function makes boxplot comparing the performance of two sets of models that are different in a single hyperparameter.
@@ -124,38 +126,115 @@ def visualize_testing_performance_comparison(baseline_perf, model_perf, output_f
 	return 1
 
 
-## This function visualizes density comparison of pairwise similarity scores among distinct classes  
-def visualize_similarity_density_comparison(sim_dict, bg_sim, plot_file):
-	## 0. Input arguments:
-		# sim_dict: dictionary that contains the pairwise similarity scores among each class
-		# bg_sim: array that contains the background pairwise similarity scores
-		# plot_file: prefix of output plotting file 
+## This function visualizes comparison of testing performance across different model classes. 
+def visualize_class_performance_comparison(perf_df, perf_col, plot_file):
+	## 0. Input arguements:
+		# perf_df: data frame containing model performance (row: dataset, column 'class': protein function class of each model, column 'measure': measurement type of each model) 
+		# perf_col: column of testing performance 
+		# plot_file: predix of output plot files
+	
+	## 1. Visualizes comparison of testing performance across different protein function classes 
+	# obtain all unique function classes  
+	class_order = np.sort(perf_df['class'].unique())
+	# iterate by function class 
+	class_value_list = []	
+	for i in range(0, len(class_order)):
+		co = class_order[i] 
+		# obtain testing performance of models that are built for the current function class 
+		co_values = perf_df[perf_df['class'] == co][perf_col].values
+		class_value_list.append(co_values)
+	# perform KW test to examine whether the distribution of testing performance varies by function classes  
+	compare_pv = stats.kruskal(*class_value_list)[1]
+	# specify figure and font size  
+	plt.figure(figsize = (24, 10))
+	plt.rc('font', size = 30)
+	plt.rc('axes', titlesize = 30)
+	plt.rc('axes', labelsize = 30)
+	plt.rc('xtick', labelsize = 20)
+	plt.rc('ytick', labelsize = 20)
+	plt.rc('legend', fontsize = 20)
+	# make boxplot to show the distribution of testing performance across different function classes 
+	ax = sns.boxplot(x = 'class', y = perf_col, data = perf_df, order = class_order)
+	# add dashed line to show the median testing performance of all models 
+	plt.axhline(y = perf_df[perf_col].median(), color = 'r', linestyle = '--', lw = 2, label = 'median of all')
+	# add p value of KW test 
+	plt.text(0, 1.05, 'P = ' + str(round(compare_pv, 2)) + '(KW text)', transform = ax.transAxes, size = 20)
+	# add labels and legend 
+	plt.xlabel('Target class')
+	plt.ylabel('Testing performance')
+	plt.legend(loc = 'upper right', bbox_to_anchor = (1, 1.1))
+	# save boxplot 
+	plt.tight_layout()
+	plt.savefig(plot_file + '_by_class.pdf')
+	plt.close()
 
-	## 1. Make density plot 
-	# specify figure and font size of density plot 
-	plt.figure(figsize = (10, 10)) 
+	## 2. Visualizes comparison of testing performance across different measurement types 
+	# obtain all measurement types 
+	measure_order = np.sort(perf_df["measure"].unique())
+	# iterate by measurement type
+	measure_value_list = []
+	for j in range(0, len(measure_order)):
+		mo = measure_order[j]
+		# obtain testing performance of models that are built for the current measurement type
+		mo_values = perf_df[perf_df['measure'] == mo][perf_col].values
+		measure_value_list.append(mo_values)
+	# perform KW test to examine whether the distribution of testing performance varies by measurement type
+	compare_pv = stats.kruskal(*measure_value_list)[1]
+	# specify figure and font size 
+	plt.figure(figsize = (10, 10))
 	plt.rc('font', size = 30)
 	plt.rc('axes', titlesize = 30)
 	plt.rc('axes', labelsize = 30)
 	plt.rc('xtick', labelsize = 30)
 	plt.rc('ytick', labelsize = 30)
 	plt.rc('legend', fontsize = 15)
-	# plot density of each class distribution 
-	for key, value in sim_dict.items():  
-		sns.distplot(value, hist = False, kde = True, kde_kws = {'linewidth': 3},  label = key)	
-	# plot density of background distribution 
-	sns.distplot(bg_sim, hist = False, kde = True, kde_kws = {'linewidth': 3},  label = 'background')
-	# add labels and legends
-	plt.xlabel('Jaccard Index')
-	plt.ylabel('Density')
-	plt.legend(loc = 'upper right')
-	# save density plot
+	# make boxplot to show the distribution of testing performance across different measurement types
+	ax = sns.boxplot(x = 'measure', y = perf_col, data = perf_df, order = measure_order)
+	# add dashed line to show the median testing performance of all models
+	plt.axhline(y = perf_df[perf_col].median(), color = 'r', linestyle = '--', lw = 2, label = 'median of all')
+	# add p value of KW test 
+	plt.text(0, 1.05, 'P = ' + str(round(compare_pv, 2)) + '(KW text)', transform = ax.transAxes, size = 20)
+	# add labels and legend 
+	plt.xlabel('Measurement')
+	plt.ylabel('Testing performance')
+	plt.legend(loc = 'upper right', bbox_to_anchor = (1, 1.1))
+	# save boxplot 
 	plt.tight_layout()
-	plt.savefig(plot_file + '_density.pdf')
+	plt.savefig(plot_file + '_by_measure.pdf')
 	plt.close()
 
-	## 2. Make boxplot
-	# specify figure and font size of density plot 
+	return 1
+
+
+## This function visualizes intergroup/intragroup comparison of pairwise similarity scores among distinct classes  
+def visualize_class_similarity_comparison(sim_df, sim_pv, class_type, plot_file):
+	## 0. Input arguments:
+		# sim_df: data frame that contains the pairwise similarity scores among each class (column 'class': class of each model, column 'group': group within the class, column 'similarity')
+		# sim_pv: dictionary that contains the p value of intragroup/intergroup comparison (key: class name, value: p-value)
+		# class_type: type of class to be compared, shown as x-axis label 
+		# plot_file: prefix of output plot file 
+
+	## 1. Identify classes with significant p-values in the comparison
+	# obtain all unique classes 
+	class_labels = np.sort(list(sim_pv.keys()))
+	# compute the Bonferroni correction p value threshold for comparing all classes  
+	pv_cut = 0.05/len(class_labels)
+	# iterate by class
+	class_labels1 = []
+	greater_sig_x = []
+	greater_sig_y = []
+	max_value = np.quantile(sim_df.similarity.values, 0.995)
+	for i in range(0, len(class_labels)):
+		cl = class_labels[i]
+		# customize class names to show on the plot 
+		cl_s = cl.split(' ')
+		class_labels1.append('\n'.join(cl_s))
+		# identify classes with significant p-values 
+		if sim_pv[cl] < pv_cut:
+			greater_sig_x.append(i)
+			greater_sig_y.append(max_value)
+	
+	## 2. Specify figure and font size of density plot 
 	plt.figure(figsize = (15, 10))
 	plt.rc('font', size = 30)
 	plt.rc('axes', titlesize = 30)
@@ -163,21 +242,19 @@ def visualize_similarity_density_comparison(sim_dict, bg_sim, plot_file):
 	plt.rc('xtick', labelsize = 15)
 	plt.rc('ytick', labelsize = 15)
 	plt.rc('legend', fontsize = 15)
-	# include background distribution in the dictionary
-	sim_dict['background'] = bg_sim
-	class_labels, class_data = sim_dict.keys(), sim_dict.values()
-	# separate words with '\n' to create new labels 
-	class_labels1 = []
-	for cl in class_labels:
-		cl_s = cl.split(' ')
-		class_labels1.append('\n'.join(cl_s))
-	# plot distribution of each class in box 
-	plt.boxplot(class_data, showfliers = False)
-	plt.xticks(range(1, len(class_labels1) + 1), class_labels1)
-	# add labels and legends
-	plt.xlabel('Target class')
-	plt.ylabel('Jaccard Index')
-	# save density plot
+	
+	## 3. Visualizes intergroup/intragroup comparison of pairwise similarity scores among distinct classes
+	sns.boxplot(x = 'class', y = 'similarity', hue = 'group', data = sim_df, order = class_labels, showfliers = False)	
+	plt.xticks(range(0, len(class_labels1)), class_labels1)
+	# add marker to show classes with significant p-values 
+	if len(greater_sig_x) > 0:
+		plt.plot(greater_sig_x, greater_sig_y, marker = '*', color = 'r', linestyle = 'None', markersize = 15, label = 'intragroup > intergroup (P < 0.05)')
+	# add labels and legend
+	plt.xlabel(class_type)
+	plt.ylabel('Feature similarity')
+	plt.legend(loc = 'upper center', bbox_to_anchor = (0.5, 1.1), ncol = 3)
+	
+	## 4. Save density plot
 	plt.tight_layout()
 	plt.savefig(plot_file + '_boxplot.pdf')
 	plt.close() 

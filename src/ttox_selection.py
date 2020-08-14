@@ -275,6 +275,45 @@ def compute_mean_and_ci_by_bootsrap(vec, confidence_interval = 0.95, bootstrap_t
 	return vec_mean, sample_means[lower_id], sample_means[upper_id]
 
 
+## This function tests whether the mean of one array is significantly greater than the mean of another array 
+def compare_sample_means_by_one_sided_test(vec1, vec2, parametric, related): 
+	## 0. Input arguments: 
+		# vec1: array 1 of 2 to be compared 
+		# vec2: array 2 of 2 to be compared (alternative hypothesis: mean of vec1 > mean of vec2)
+		# parametric: whether to use parametric test (True) or non-parameteric test (False)
+		# related: whether two arrays are related (True) or not (False)
+
+	## 1. Perform two-sided statistical test according to the specified parameters 
+	# two-sided parametric test 
+	if parametric == True:
+		# t test with related samples 
+		if related == True:  
+			two_sided_p = stats.ttest_rel(vec1, vec2)[1]
+		# t test with independent samples
+		else:
+			two_sided_p = stats.ttest_ind(vec1, vec2)[1]
+	# two-sided nonparametric test 	
+	else:
+		# Wilcoxon signed-rank test 
+		if related == True: 
+			two_sided_p = stats.wilcoxon(vec1, vec2)[1]	
+		# Mann–Whitney U test 
+		else: 
+			two_sided_p = stats.mannwhitneyu(vec1, vec2)[1]
+	
+	## 2. Covert two-sided test p-value to one-sided test p-value by comparing the average  
+	# compute mean of each array  
+	vec1_mean = np.mean(vec1)
+	vec2_mean = np.mean(vec2)
+	# convert p-value 
+	if vec1_mean > vec2_mean:
+		one_sided_p = two_sided_p/2
+	else:
+		one_sided_p = 1 - two_sided_p/2
+	
+	return	one_sided_p 
+
+
 ## This function computes basic statistics of feature selection results
 def compute_feature_selection_statistic(all_perf_df, select_perf_df, select_number_df, optimal_column, perf_threshold):
 	## 0. Input arguments: 
@@ -300,8 +339,8 @@ def compute_feature_selection_statistic(all_perf_df, select_perf_df, select_numb
 	N_select_mean, N_select_ci_lower, N_select_ci_upper = compute_mean_and_ci_by_bootsrap(select_number_df[optimal_column].values)
 	# average testing performance and 95% CI of models built upon selected features
 	select_perf_mean, select_perf_ci_lower, select_perf_ci_upper = compute_mean_and_ci_by_bootsrap(select_perf_df[optimal_column].values)
-	# p-value of two-sided Wilcoxon signed-rank test to examine whether there is a difference bewteen testing performance of models built upon all features and selected features
-	two_sided_p = stats.wilcoxon(all_perf_df['all_features_testing'].values, select_perf_df[optimal_column].values)[1]
+	# p-value of one-sided Wilcoxon signed-rank test to examine whether there is a difference bewteen testing performance of models built upon all features and selected features
+	one_sided_p = compare_sample_means_by_one_sided_test(select_perf_df[optimal_column].values, all_perf_df['all_features_testing'].values, False, True)
 
 	## 3. Build output list of statistics
 	fs_stat = []
@@ -310,7 +349,7 @@ def compute_feature_selection_statistic(all_perf_df, select_perf_df, select_numb
 	fs_stat.append('Average (95% CI) performance of models built upon all features: ' + str(round(all_perf_mean, 3)) + '(' + str(round(all_perf_ci_lower, 3)) + '-' + str(round(all_perf_ci_upper, 3)) + ')')
 	fs_stat.append('Average number (95% CI) of selected features: ' + str(round(N_select_mean, 0)) + '(' + str(round(N_select_ci_lower, 0)) + '-' + str(round(N_select_ci_upper, 0)) + ')')
 	fs_stat.append('Average (95% CI) performance of models built upon selected features: ' + str(round(select_perf_mean, 3)) + '(' + str(round(select_perf_ci_lower, 3)) + '-' + str(round(select_perf_ci_upper, 3)) + ')')
-	fs_stat.append('Two-sided paired Wilcoxon signed-rank tes p-value: ' + str(two_sided_p))
+	fs_stat.append('One-sided paired Wilcoxon signed-rank test p-value: ' + str(one_sided_p))
 
 	return fs_stat
 
