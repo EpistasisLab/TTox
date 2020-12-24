@@ -1,0 +1,111 @@
+#!/bin/bash
+#BSUB -q epistasis_long
+#BSUB -J select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs
+#BSUB -n 100
+#BSUB -o src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs.%J.out
+#BSUB -e src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs.%J.error
+#BSUB -N
+
+module unload python
+module load python/3.7
+
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs1.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs2.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs3.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs4.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs5.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs6.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs7.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs8.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs9.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs10.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs11.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs12.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs13.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs14.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs15.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs16.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs17.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs18.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs19.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs20.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs21.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs22.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs23.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs24.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs25.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs26.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs27.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs28.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs29.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs30.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs31.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs32.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs33.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs34.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs35.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs36.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs37.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs38.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs39.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs40.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs41.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs42.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs43.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs44.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs45.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs46.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs47.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs48.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs49.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs50.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs51.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs52.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs53.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs54.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs55.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs56.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs57.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs58.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs59.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs60.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs61.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs62.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs63.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs64.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs65.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs66.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs67.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs68.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs69.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs70.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs71.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs72.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs73.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs74.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs75.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs76.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs77.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs78.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs79.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs80.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs81.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs82.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs83.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs84.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs85.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs86.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs87.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs88.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs89.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs90.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs91.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs92.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs93.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs94.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs95.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs96.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs97.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs98.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs99.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_fingerprint_maccs100.sh &

@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # created by Yun Hao @MooreLab 2019
-# This script combines ReBATE methods and cross-validation to select relevant features, then evaluates model performance on hold-out testing set, eventually implements the model to predict responses of new instances. 
+# This script implements ReBATE methods together with cross-validation to select relevant features, then evaluates model performance on hold-out testing set, eventually implements the model to predict responses of new instances. 
 
 
 ## Module
@@ -29,6 +29,7 @@ def main(argv):
 		# argv 12: number of performance-decreasing iterations before stopping the model-fitting process (due to overfitting)
 		# argv 13: lower bound of percentage to define that a feature is consisently relevant across folds
 		# argv 14: number of independent cross-validation runs, each run will generate one performance score
+		# argv 15: whether to predict probability of positive class: 1 or 0 (optional, only applied when argv 3 != NA and argv 10 == classification, default: 0)
 	output_name = argv[4] + '_fd_' + argv[6] + '_fr_' + argv[7] + '_tf_' + argv[8] + '_pc_' + argv[9] + '_md_' + argv[11] + '_tl_' + argv[12] + '_cs_' + argv[13] + '_nr_' + argv[14]
 		
 	## 1. Read in input training and testing files 
@@ -39,7 +40,7 @@ def main(argv):
 
 	## 2. Split training feature-response dataset into K folds 
 	label_col_name = argv[5]
-	train_data_split_list = ttox_learning.split_dataset_into_k_folds(train_data_df, label_col_name, int(argv[6]), seed_no = 0)
+	train_data_split_list = ttox_learning.split_dataset_into_k_folds(train_data_df, label_col_name, int(argv[6]), argv[10], seed_no = 0)
 	
 	## 3. Compute feature importance scores on each fold of training data using ReBATE methods  
 	feature_importance_df = ttox_selection.rank_features_by_rebate_methods(train_data_split_list, argv[7], int(argv[8]), remove_percent = float(argv[9]))
@@ -74,13 +75,17 @@ def main(argv):
 
 	## 8. Implements learned model to predict response for new instances
 	if argv[3] != 'NA':
+		# whether to predict probability of positive class
+		prob_indi = 0
+		if len(argv) > 15: 
+			prob_indi = int(argv[15])
 		pred_data_df = pd.read_csv(argv[3], sep = '\t', header = 0, index_col = 0)
 		# use all features to predict 
-		pred_label_all = ttox_learning.implement_prediciton_model(model_all, pred_data_df.values, argv[10])
+		pred_label_all = ttox_learning.implement_prediciton_model(model_all, pred_data_df.values, argv[10], pred_prob = prob_indi)
 		# use selected featuers to predict 
 		pred_label_select = np.empty(pred_data_df.shape[0])
 		if len(select_features) > 0:
-			pred_label_select = ttox_learning.implement_prediciton_model(model_select, pred_data_df[select_features].values, argv[10])
+			pred_label_select = ttox_learning.implement_prediciton_model(model_select, pred_data_df[select_features].values, argv[10], pred_prob = prob_indi)
 		# Aggregate predictions into one data frame (2 columns, 1: predictions from model using selected features, 2: predictions from model using all features) 
 		pred_df = pd.DataFrame({'select_features_pred': pred_label_select,'all_features_pred': pred_label_all}, index = pred_data_df.index)
 		pred_df.to_csv(output_name + '_prediction.tsv', sep = '\t', float_format = '%.5f')	

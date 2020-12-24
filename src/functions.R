@@ -102,10 +102,10 @@ read.performance.files <- function(perf_files, perf_hyper, hyper_names){
 		# perf_hyper: hyperparameter settings of model performance files 
 		# hyper_names: all hyperparameter settings
 
-	## 1. Read in all performance metric
+	## 1. Read in all performance files
 	# iterate by performance file 
 	all_perf_metric <- lapply(perf_files, function(pf){
-		# read in all the lines from a performance file 
+		# read ii   n all the lines from a performance file 
 		metric_lines <- readLines(pf);
 		# extract metric from each line 
 		metrics <- sapply(metric_lines, function(ml){
@@ -113,35 +113,79 @@ read.performance.files <- function(perf_files, perf_hyper, hyper_names){
 			if(length(ml_s) < 2)	return('')
 			else	return(ml_s[[2]])
 		});
-		return(metrics);
+		return(metrics);	
 	});
 
-	## 2. Obtain metrics of model using all features 
-	all_feat_metric <- as.numeric(all_perf_metric[[1]][1:4]);
-	names(all_feat_metric) <- c("N_train", "N_test", "N_all_features", "all_features_testing");
-		 	
-	## 3. Obtain number of features selected 
-	N_select_feat <- sapply(all_perf_metric, function(apm) as.integer(apm[[6]]));	
+	## 2. Extract model statistics and metrics from performance files
+	perf_results <- lapply(all_perf_metric, function(apm){
+		# number of training instances
+		N_train <- as.integer(apm[[1]]); 
+		# number of testing instances 
+		N_test <- as.integer(apm[[2]]);
+		# number of all features
+		N_feat <- as.integer(apm[[3]]); 
+		model_all_stat <- c(N_train, N_test, N_feat);
+		# performance metric names 
+		test_all_s <- strsplit(apm[[4]], ";")[[1]];
+		metric_name <- sapply(test_all_s, function(tas){
+			tass <- strsplit(tas, ":")[[1]][[1]];
+			return(tass);
+                });
+		# testing performance using all features
+		test_all_perf <- sapply(test_all_s, function(tas){
+			tass <- as.numeric(strsplit(tas, ":")[[1]][[2]]);	
+			return(tass);
+		});
+		# number of selected features 
+		N_select <- as.integer(apm[[6]]);
+		# training performance 
+		train_select_s <- strsplit(apm[[7]], ";")[[1]];
+		train_select_perf <- sapply(train_select_s, function(ts){
+			tss <- strsplit(ts, ":")[[1]][[2]];
+			tsss <- as.numeric(strsplit(tss, ",")[[1]]);
+			return(mean(tsss, na.rm = T));			
+		});
+		# testing perf using selected features 
+		test_select_s <- strsplit(apm[[8]], ";")[[1]];
+		test_select_perf <- sapply(test_select_s, function(tss){
+			tsss <- as.numeric(strsplit(tss, ":")[[1]][[2]]);
+			return(tsss);
+                }); 
+		return(ls = list(model_all_stat = model_all_stat, metric_name = metric_name, test_all_perf = test_all_perf, N_select = N_select, train_select_perf = train_select_perf, test_select_perf = test_select_perf));		
+	});
 
-	## 4. Obtain training performance of of feature selection 
-	select_features_train <- sapply(all_perf_metric, function(apm){
-		# obtain performance of multiple runs
-		train_runs <- strsplit(apm[[7]], ",", fixed = T)[[1]];
-		train_runs <- as.numeric(train_runs);
-		# compute average of multiple runs 
-		ave_train_runs <- mean(train_runs, na.rm = T);
-		return(ave_train_runs);
-	});		
-	
-	## 5. Obtain testing performance of feature selection
-	select_features_test <- sapply(all_perf_metric, function(apm) as.numeric(apm[[8]])); 	
-
-	## 6. Output vectors 
-	N_select_feat_vec <- select_features_train_vec <- select_features_test_vec <- rep(NA, length(hyper_names));
-	names(N_select_feat_vec) <- names(select_features_train_vec) <- names(select_features_test_vec) <- hyper_names;
+	## 3. Collect number of selected features from all models   
+	N_select_feat <- sapply(perf_results, function(pr) pr[["N_select"]]);
+	N_select_feat_vec <- rep(NA, length(hyper_names));
+	names(N_select_feat_vec) <- hyper_names;
 	N_select_feat_vec[perf_hyper] <- N_select_feat;
-	select_features_train_vec[perf_hyper] <- select_features_train;
-	select_features_test_vec[perf_hyper] <- select_features_test;
-	
-	return(ls = list(all_features = all_feat_metric, select_features_N = N_select_feat_vec, select_features_train = select_features_train_vec, select_features_test = select_features_test_vec));
+		
+	## 4. Collect training/testing performance under multiple metrics from all models 
+	# obtain all metric types 
+	metrics <- perf_results[[1]][["metric_name"]]; 
+	N_metrics <- length(metrics);
+	# iterate by metrics
+	metric_perf <- lapply(1:N_metrics, function(nm){
+		# testing performance of models using all features 
+		model_all_stat <- perf_results[[1]][["model_all_stat"]];
+		test_all_perf <- sapply(perf_results, function(pf) pf[["test_all_perf"]][[nm]]);
+		test_all_perf_vec <- rep(NA, length(hyper_names));
+		names(test_all_perf_vec) <- hyper_names;
+		test_all_perf_vec[perf_hyper] <- test_all_perf;
+		all_features <- c(model_all_stat, test_all_perf_vec);
+		names(all_features) <- c("N_train", "N_test", "N_all_features", names(test_all_perf_vec));
+		# training performance of models using selected features 
+		train_select_perf <- sapply(perf_results, function(pf) pf[["train_select_perf"]][[nm]]);
+		# testing performance of models using all features 
+		test_select_perf <- sapply(perf_results, function(pf) pf[["test_select_perf"]][[nm]]);
+		# output vectors of training/trainingperformance of models using selected features 
+		train_select_perf_vec <- test_select_perf_vec <- rep(NA, length(hyper_names));
+		names(train_select_perf_vec) <- names(test_select_perf_vec) <- hyper_names;
+		train_select_perf_vec[perf_hyper] <- train_select_perf;
+		test_select_perf_vec[perf_hyper] <- test_select_perf;		
+		return(ls = list(all_features = all_features, select_features_train = train_select_perf_vec, select_features_test = test_select_perf_vec));
+	});
+	names(metric_perf) <- metrics;
+
+	return(ls = list(select_features_N = N_select_feat_vec, metric_name = metrics, metric_perf = metric_perf));
 }

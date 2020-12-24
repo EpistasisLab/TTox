@@ -1,0 +1,111 @@
+#!/bin/bash
+#BSUB -q epistasis_long
+#BSUB -J select_feature_by_cv_target_0.25_binary_tuning_descriptor_all
+#BSUB -n 100
+#BSUB -o src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all.%J.out
+#BSUB -e src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all.%J.error
+#BSUB -N
+
+module unload python
+module load python/3.7
+
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all1.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all2.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all3.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all4.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all5.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all6.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all7.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all8.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all9.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all10.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all11.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all12.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all13.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all14.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all15.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all16.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all17.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all18.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all19.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all20.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all21.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all22.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all23.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all24.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all25.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all26.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all27.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all28.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all29.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all30.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all31.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all32.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all33.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all34.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all35.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all36.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all37.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all38.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all39.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all40.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all41.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all42.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all43.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all44.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all45.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all46.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all47.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all48.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all49.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all50.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all51.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all52.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all53.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all54.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all55.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all56.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all57.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all58.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all59.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all60.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all61.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all62.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all63.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all64.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all65.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all66.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all67.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all68.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all69.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all70.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all71.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all72.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all73.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all74.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all75.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all76.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all77.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all78.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all79.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all80.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all81.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all82.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all83.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all84.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all85.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all86.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all87.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all88.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all89.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all90.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all91.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all92.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all93.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all94.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all95.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all96.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all97.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all98.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all99.sh &
+./src/run/select_feature_by_cv_target_0.25_binary_tuning_descriptor_all100.sh &

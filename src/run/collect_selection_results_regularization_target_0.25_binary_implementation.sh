@@ -1,0 +1,3 @@
+module add R
+Rscript	src/collect_selection_results.R	data/compound_target_0.25_binary_regularization_implementation/fingerprint_maccs/	data/compound_target_0.25_binary_regularization_implementation/fingerprint_maccs	14	11	0	17	20
+Rscript	src/collect_selection_results.R	data/compound_target_0.25_binary_regularization_implementation/descriptor_all/	data/compound_target_0.25_binary_regularization_implementation/descriptor_all	14	11	0	17	20

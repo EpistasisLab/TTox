@@ -88,6 +88,11 @@ def identify_relevant_features(data_split_list, ml_task, ml_method, feat_impt_df
 		# verbose: whether to show progress by each fold: True of False
 	
 	## 1.Identify relevant features of each fold 
+	# define metric used for feature selection according to the specified task  
+	if ml_task == 'regression':
+		select_metric = 'r2'
+	if ml_task == 'classification':
+		select_metric = 'auc'
 	# iterate by fold
 	select_ids = []
 	for i in range(0, len(data_split_list)):
@@ -108,12 +113,16 @@ def identify_relevant_features(data_split_list, ml_task, ml_method, feat_impt_df
 		metric_best = -float('inf')
 		# iterate by feature ranking before finding the best-performing featue set
 		while (j_tol < tolerance) & (j < len(sorted_feat) + 1): 
+			# intermediate output 
+			if verbose == True:
+				print('Fitting model for feature ' + str(j) + '\n')
 			# extract the top j features from training/testing data
 			j_feat = sorted_feat[0:j]
 			j_feat_train = feat_train[j_feat]
 			j_feat_test = feat_test[j_feat]
 			# perform regression/classification task using the top j features
-			_, _, _, _, j_metric = ttox_learning.evaluate_model_performance(j_feat_train.values, j_feat_test.values, label_train.values, label_test.values, ml_task, ml_method)
+			_, _, _, _, j_metric_dict = ttox_learning.evaluate_model_performance(j_feat_train.values, j_feat_test.values, label_train.values, label_test.values, ml_task, ml_method)
+			j_metric = j_metric_dict[select_metric]
 			# compare performance of current iteration with best performance from previous iterations
 			if j_metric > metric_best:
 				# find a better-performing feature set 
@@ -151,6 +160,32 @@ def select_consistent_features(select_ids_df, pct_cut):
 	return select_ids_mean_df, select_features
 
 
+## This function converts model metrics to a string
+def convert_metric_to_string(metric_dict, round_digit = 5):
+	## 0. Input arguments: 
+		# metric_dict: dictionary that contains metrics of model performance 
+		# round_digit: number of decimal places to round to (default: 5) 
+	
+	## 1. Join metric names and values to build output strings 
+	# iterate by item in metric_dict 
+	metric_str = []
+	for k,v in metric_dict.items():
+		# round metric values  
+		v = np.round(v, round_digit)
+		# convert metric values to strings  
+		if type(v) is np.ndarray:
+			vv_str = [str(vv) for vv in v]	
+			v_str = ','.join(vv_str)
+		else:
+			v_str = str(v)
+		# join the metric name 
+		metric_str.append(k + ':' + v_str)
+	# join all item strings together 
+	output_str = ';'.join(metric_str)
+	
+	return output_str
+	
+
 ## This function generates a list that describes summary statistics of a supervised learning model 
 def generate_performance_summary(N_train_instances, N_test_instances, N_all_features, metric_all_test, select_features, N_select_features, metric_select_train, metric_select_test):
 	## 0. Input arguments: 
@@ -163,30 +198,27 @@ def generate_performance_summary(N_train_instances, N_test_instances, N_all_feat
 		# metric_select_train: training performance of model using relevant features 
 		# metric_select_test: testing performance of model using relevant features 
 
-	## 1. Convert training performance list to string 
-	metric_select_train = np.round(metric_select_train, 5)
-	metric_select_train_str = [str(mst) for mst in metric_select_train]
-	
-	## 2. Add model statistics to a list  
+	## 1. Add model statistics to a list  
 	perf_list = []
 	perf_list.append('Number of training instances: ' + str(N_train_instances))
 	perf_list.append('Number of testing instances: ' + str(N_test_instances))
 	perf_list.append('Number of all features: ' + str(N_all_features))
-	perf_list.append('Testing performance of model using all features: ' + str(round(metric_all_test, 5)))
+	perf_list.append('Testing performance of model using all features: ' + convert_metric_to_string(metric_all_test))
 	perf_list.append('Relevant features: ' + ','.join(select_features))
 	perf_list.append('Number of relevant features: '+ str(N_select_features))
-	perf_list.append('Training performance of model using relevant features: ' + ','.join(metric_select_train_str))
-	perf_list.append('Testing performance of model using relevant features: '+ str(round(metric_select_test, 5)))
+	perf_list.append('Training performance of model using relevant features: ' + convert_metric_to_string(metric_select_train.to_dict(orient = 'list')))
+	perf_list.append('Testing performance of model using relevant features: '+ convert_metric_to_string(metric_select_test))
 
 	return perf_list
 
 
 ## This function finds the optimal hyperparamter setting based on model performance
-def find_optimal_hyperparameter_setting(perf_df, method):
+def find_optimal_hyperparameter_setting(perf_df, method, task):
 	## 0. Input arguments:
 		# perf_df: data frame containing model performance under different hyperparamter settings (row: model, column: hyperparameter)   
 		# method: metric for defining optimal hyperparamter setting: 'median' or 'mean'
-
+		# task: type of supervised learning task: 'regression' or 'classification'
+	
 	## 1. Remove models with no selected features under some hyperparameter settings (rows with NA's values)
 	perf_df = perf_df[perf_df.isna().sum(axis = 1) == 0]
 
@@ -199,18 +231,32 @@ def find_optimal_hyperparameter_setting(perf_df, method):
 		optimal_hs = perf_df.mean(axis = 0).sort_values(ascending = False).index[0]
 
 	## 3. Build output list that contains detailed optimal hyperparameter setting 
-	optimal_hs_s = optimal_hs.split('_')
 	optimal_list = []
-	optimal_list.append('Number of folds: 10')
-	optimal_list.append('Feature ranking method: ' + optimal_hs_s[1])
-	optimal_list.append('Implement TURF: ' + optimal_hs_s[3])
-	optimal_list.append('Remove percentile: ' + optimal_hs_s[5])
-	optimal_list.append('Learning task: regression')
-	optimal_list.append('Classification/regression method: ' + optimal_hs_s[7])
-	optimal_list.append('Tolerance iterations: ' + optimal_hs_s[9])
-	optimal_list.append('Threshold of consistency ratio: ' + optimal_hs_s[11])
-	optimal_list.append('Number of repeats: 20')
-	
+	optimal_hs_s = optimal_hs.split('_')
+	# optimal hyperparameter setting for structure-target datasets 
+	if optimal_hs_s[0] == 'fd':
+		optimal_list.append('Number of folds: 10')
+		optimal_list.append('Feature ranking method: ' + optimal_hs_s[1])
+		optimal_list.append('Implement TURF: ' + optimal_hs_s[3])
+		optimal_list.append('Remove percentile: ' + optimal_hs_s[5])
+		optimal_list.append('Learning task: ' + task)
+		optimal_list.append('Classification/regression method: ' + optimal_hs_s[7])
+		optimal_list.append('Tolerance iterations: ' + optimal_hs_s[9])
+		optimal_list.append('Threshold of consistency ratio: ' + optimal_hs_s[11])
+		optimal_list.append('Number of repeats: 20')
+	# optimal hyperparameter setting for target-adverse event datasets  
+	if optimal_hs_s[0] == 'mc': 
+		optimal_list.append('Target binding profile AUC threshold: ' + optimal_hs_s[1])
+		optimal_list.append('Number of folds: 10')
+		optimal_list.append('Feature ranking method: ' + optimal_hs_s[5])
+		optimal_list.append('Implement TURF: ' + optimal_hs_s[7])
+		optimal_list.append('Remove percentile: ' + optimal_hs_s[9])
+		optimal_list.append('Learning task: ' + task)
+		optimal_list.append('Classification/regression method: ' + optimal_hs_s[11])
+		optimal_list.append('Tolerance iterations: 50')
+		optimal_list.append('Threshold of consistency ratio: 0.5')
+		optimal_list.append('Number of repeats: 20')
+
 	return perf_df, optimal_hs, optimal_list
 
 
@@ -260,7 +306,7 @@ def compute_mean_and_ci_by_bootsrap(vec, confidence_interval = 0.95, bootstrap_t
 	vec_len = len(vec) 
 	# Repeat boostrap process
 	sample_means = []
-	for sample in range(0, 1000):
+	for sample in range(0, bootstrap_times):
 		# Sampling with replacement from the input array
 		sample_values = np.random.choice(vec, size = vec_len, replace = True)
 		# compute sample mean
@@ -334,13 +380,13 @@ def compute_feature_selection_statistic(all_perf_df, select_perf_df, select_numb
 	# number of all features 
 	N_all = all_perf_df['N_all_features'].values[0]
 	# average testing performance and 95% CI of models built upon all features
-	all_perf_mean, all_perf_ci_lower, all_perf_ci_upper = compute_mean_and_ci_by_bootsrap(all_perf_df['all_features_testing'].values)
+	all_perf_mean, all_perf_ci_lower, all_perf_ci_upper = compute_mean_and_ci_by_bootsrap(all_perf_df[optimal_column].values)
 	# average number and 95% CI of models built upon selected features
 	N_select_mean, N_select_ci_lower, N_select_ci_upper = compute_mean_and_ci_by_bootsrap(select_number_df[optimal_column].values)
 	# average testing performance and 95% CI of models built upon selected features
 	select_perf_mean, select_perf_ci_lower, select_perf_ci_upper = compute_mean_and_ci_by_bootsrap(select_perf_df[optimal_column].values)
 	# p-value of one-sided Wilcoxon signed-rank test to examine whether there is a difference bewteen testing performance of models built upon all features and selected features
-	one_sided_p = compare_sample_means_by_one_sided_test(select_perf_df[optimal_column].values, all_perf_df['all_features_testing'].values, False, True)
+	one_sided_p = compare_sample_means_by_one_sided_test(select_perf_df[optimal_column].values, all_perf_df[optimal_column].values, False, True)
 
 	## 3. Build output list of statistics
 	fs_stat = []
@@ -374,7 +420,7 @@ def collect_model_prediction(perf_df, optimal_column, perf_threshold, pred_folde
 		# obtain the name of prediction file  
 		pdi_target = pdi.split('_')[0]
 		pdi_measure = pdi.split('_')[1]
-		pdi_pred_file = pred_folder + '_' + pdi_measure + '_' + pdi_target + '_whole_data.tsv_fd_10_' + optimal_column + '_nr_20_prediction.tsv'
+		pdi_pred_file = pred_folder + '_' + pdi_measure + '_0.25_binary_' + pdi_target + '_whole_data.tsv_fd_10_' + optimal_column + '_nr_20_prediction.tsv'
 		targets.append(pdi_target)
 		# read in the prediction of models and select the column of interest 
 		pdi_pred_df = pd.read_csv(pdi_pred_file, sep = '\t', header = 0, index_col = 0)				
@@ -410,7 +456,7 @@ def connect_structure_target(perf_df, optimal_column, perf_threshold, perf_folde
 		# obtain the name of performance file 
 		pdi_target = pdi.split('_')[0]
 		pdi_measure = pdi.split('_')[1] 
-		pdi_perf_file = perf_folder + '_' + pdi_measure + '_' + pdi_target + '_whole_data.tsv_fd_10_' + optimal_column + '_nr_20_performance.txt'
+		pdi_perf_file = perf_folder + '_' + pdi_measure + '_0.25_binary_' + pdi_target + '_whole_data.tsv_fd_10_' + optimal_column + '_nr_20_performance.txt'
 		targets.append(pdi_target)
 		# read in the performance file  
 		pdi_perf_file_read = open(pdi_perf_file, 'r')

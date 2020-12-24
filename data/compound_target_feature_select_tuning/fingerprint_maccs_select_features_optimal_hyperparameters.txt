@@ -1,9 +1,0 @@
-Number of folds: 10
-Feature ranking method: MultiSURF
-Implement TURF: 1
-Remove percentile: 0.1
-Learning task: regression
-Classification/regression method: XGBoost
-Tolerance iterations: 50
-Threshold of consistency ratio: 0.5
-Number of repeats: 20
