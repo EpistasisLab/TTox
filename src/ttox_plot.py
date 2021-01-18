@@ -401,7 +401,7 @@ def visualize_group_feature_similarity_comparison(sim_df, sim_pv, group_col, gro
 	plt.xlabel(group_type)
 	plt.ylabel('Feature similarity')
 	# add legend showing the significance threshold of markers  
-	legend_elements = [Line2D([0], [0], marker = '*', color = 'w', label = 'intragroup, left > intergroup, right (FDR<0.05)', markerfacecolor = 'r', markersize = 15)]
+	legend_elements = [Line2D([0], [0], marker = '*', color = 'w', label = 'intragroup,left > intergroup,right (FDR<0.05)', markerfacecolor = 'r', markersize = 15)]
 	plt.legend(handles = legend_elements, loc = 'upper right', frameon = False)
 	
 	## 4. Save boxplot

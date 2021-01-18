@@ -16,7 +16,7 @@ import ttox_plot
 def main(argv):
 	## 0. Input arguments:
 		# argv 1: input file that contains selected relevant features of all models (row: models, column 1: model index, column 2: features) 
-		# argv 2: input file that contaisn testing performance of all models (row: models)
+		# argv 2: input file that contains testing performance of all models (row: models)
 		# argv 3: output file of analysis results 
 		# argv 4: output file of visualization results
 			
