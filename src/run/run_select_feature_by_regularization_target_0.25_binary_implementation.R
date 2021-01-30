@@ -12,7 +12,6 @@ descriptor_type	<- Args[1];     # input folder of all descriptor files
 N_cores		<- Args[2];	# number of cores to run the jobs 
 # data_folders
 target_folder	<- "data/compound_target_0.25_binary_data/";
-chemical_folder	<- "https://raw.githubusercontent.com/yhao-compbio/chemical/master/data/offsides_compounds/";
 output_folder	<- "data/compound_target_0.25_binary_regularization_implementation/";
 job_name	<- "select_feature_by_regularization_target_0.25_binary_implementation";
 
@@ -49,10 +48,11 @@ commands <- mapply(function(af, afi1, afi2){
 	# testing file
 	af_test <- paste(target_folder, af, "_test.tsv", sep = "");
 	# prediction file 
-	af_pred <- paste(chemical_folder, strsplit(afi1, "_")[[1]][[1]], "_combined/offsides_compounds_", afi1, ".tsv", sep = "")	
+	af_pred <- NA	
 	# output prefix 
-	af_out <- paste(output_folder, afi1, "/", af, sep = "")
-	af_commands <- paste("python", "src/select_feature_by_regularization.py", af_train, af_test, af_pred, af_out, afi2, hps, sep = " ")
+	af_out1 <- paste(output_folder, afi1, "/lasso/", af, sep = "")
+	af_out2 <- paste(output_folder, afi1, "/randomforest/", af, sep = "")
+	af_commands <- paste("python", "src/select_feature_by_regularization.py", af_train, af_test, af_pred, af_out1, af_out2, afi2, hps, sep = " ")
 	return(af_commands);
 }, all_files, all_files_info[1,], all_files_info[2,])
 # shuffle commands (in order to balance running time of each shell scripts)

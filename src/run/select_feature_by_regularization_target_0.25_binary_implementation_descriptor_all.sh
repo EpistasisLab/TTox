@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -q epistasis_long
 #BSUB -J select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all
-#BSUB -n 49
+#BSUB -n 92
 #BSUB -o src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all.%J.out
 #BSUB -e src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all.%J.error
 #BSUB -N
@@ -58,3 +58,46 @@ module load python/3.7
 ./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all47.sh &
 ./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all48.sh &
 ./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all49.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all50.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all51.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all52.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all53.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all54.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all55.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all56.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all57.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all58.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all59.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all60.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all61.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all62.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all63.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all64.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all65.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all66.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all67.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all68.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all69.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all70.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all71.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all72.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all73.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all74.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all75.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all76.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all77.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all78.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all79.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all80.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all81.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all82.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all83.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all84.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all85.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all86.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all87.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all88.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all89.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all90.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all91.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_descriptor_all92.sh &

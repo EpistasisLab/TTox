@@ -234,7 +234,7 @@ def find_optimal_hyperparameter_setting(perf_df, method, task):
 	optimal_list = []
 	optimal_hs_s = optimal_hs.split('_')
 	# optimal hyperparameter setting for structure-target datasets 
-	if optimal_hs_s[0] == 'fd':
+	if optimal_hs_s[0] == 'fr':
 		optimal_list.append('Number of folds: 10')
 		optimal_list.append('Feature ranking method: ' + optimal_hs_s[1])
 		optimal_list.append('Implement TURF: ' + optimal_hs_s[3])

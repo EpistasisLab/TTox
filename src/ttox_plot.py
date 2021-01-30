@@ -105,15 +105,15 @@ def visualize_hyperparameter_comparison(perf_df, task, output_folder):
 ## This function visualizes performance comparison between two sets of models  
 def plot_comparison_scatter(x_metric, y_metric, xy_lim, cut_list, x_label, y_label, plot_file, show_pv = True):
 	## 0. Input arguments: 
-		# x_metric: performance metric of set 1, to be plotted on the x axis  
-		# y_metric: performance metric of set 2, to be plotted on the y axis  
+		# x_metric: metric values of set 1, to be plotted on the x axis  
+		# y_metric: metric values of set 2, to be plotted on the y axis  
 		# xy_lim: arrays that contains plotting range of x and y axis
-		# cut_list: arrays that contains metric thresholds 
+		# cut_list: arrays that contains value thresholds 
 		# x_label: label of x axis 
 		# y_label: label of y axis 
 		# plot_file: file name of output figures  
 		# show_pv: whether to show p value comparing the x and y axis values 	
-	
+
 	## 1. Specify plotting parameters 
 	# x and y axis range 
 	xy_lim_lower = xy_lim[0] 
@@ -142,7 +142,7 @@ def plot_comparison_scatter(x_metric, y_metric, xy_lim, cut_list, x_label, y_lab
 	# make scatter plot
 	plt.scatter(x_metric, y_metric, c = 'blue')
 	plt.plot(xy_lim, xy_lim, '-r')
-        # perform wilcoxon test to examine whether y_metric is greater than x_metric
+	# perform wilcoxon test to examine whether y_metric is greater than x_metric
 	if show_pv == True:
 		pv = ttox_selection.compare_sample_means_by_one_sided_test(y_metric, x_metric, False, True)
 		text_col = 'black'
@@ -176,15 +176,16 @@ def plot_comparison_scatter(x_metric, y_metric, xy_lim, cut_list, x_label, y_lab
 	return 1
 
 
-## This function visualizes testing performance comparison between models
-def visualize_testing_performance_comparison(file_df, plot_task, select_rows, output_folder, l1_file_name):
+## This function visualizes testing performance comparison between models.
+def visualize_testing_performance_comparison(file_df, plot_task, select_rows, output_folder, l1_file_name, output_folder_f1):
 	## 0. Input arguments:
 		# file_df: data frame that contains performance file names  
 		# plot_task: type of supervised learning task for which models are built: 'regression' or 'classification' 
 		# select_rows: subset of models that are selected for comparison (one model per target)  
-		# output_folder: folder of output figures   
+		# output_folder: folder of output figures that visualize comparison between selected features and all features  
 		# l1_file_name: name of file that contains performance file names of L1-regularized models  
-	
+		# output_folder_f1: folder of output figures that visualize comparison between selected features and L1-selected features  
+		
 	## 1. Specift plotting hyperparameters 
 	# hyperparameters for regression tasks  
 	if plot_task == 'regression':
@@ -218,8 +219,8 @@ def visualize_testing_performance_comparison(file_df, plot_task, select_rows, ou
 		baseline_df = pd.read_csv(baseline_file, sep = '\t', header = 0, index_col = 0)
 		baseline_perf = baseline_df.loc[select_rows, perf_col].values
 		# visualize comparison between model using selected features and model using all features 
-		pm_xlabel = mn + ' by all features'
-		pm_ylabel = mn + ' by selected features'
+		pm_xlabel = mn + ' before selection'
+		pm_ylabel = mn + ' after ReBATE selection'
 		pm_file = output_folder + '_all_testing_performance_compared_' + pm + '.pdf' 
 		baseline_compare = plot_comparison_scatter(baseline_perf, model_perf, plot_range, plot_cut, pm_xlabel, pm_ylabel, pm_file)
 		# check if L1 regulariztion models are also included in the comparison 
@@ -230,11 +231,53 @@ def visualize_testing_performance_comparison(file_df, plot_task, select_rows, ou
 			l1_col = l1_basedline_df.columns[0]
 			l1_baseline_perf = l1_basedline_df.loc[select_rows, l1_col].values 
 			# visualize comparison between model using selected features and model using L1 regularization 
-			pm_xlabel_l1 = mn + ' by L1 selected features'
-			pm_l1_file = output_folder + '_l1_testing_performance_compared_' + pm + '.pdf'
-			l1_baseline_compare = plot_comparison_scatter(l1_baseline_perf, model_perf, plot_range, plot_cut, pm_xlabel_l1, pm_ylabel, pm_l1_file)
+			f1_s = output_folder_f1.split('_')
+			l1_method = f1_s[len(f1_s) - 1]
+			if l1_method == 'randomforest':
+				pm_xlabel_l1 = mn + ' after L1 selection'
+				pm_ylabel_l1 = mn + ' after ReBATE selection'
+			if l1_method == 'lasso':
+				pm_xlabel_l1 = mn + ' by L1+logistic regression'
+				pm_ylabel_l1 = mn + ' by ReBATE+Randomforest'
+			pm_l1_file = output_folder_f1 + '_l1_testing_performance_compared_' + pm + '.pdf'
+			l1_baseline_compare = plot_comparison_scatter(l1_baseline_perf, model_perf, plot_range, plot_cut, pm_xlabel_l1, pm_ylabel_l1, pm_l1_file)
 	
 	return 1
+
+
+## This function visualizes feature number comparison between models. 
+def visualize_feature_number_comparison(select_number_df, l1_number_df, select_rows, output_folder):
+	## 0. Input arguments:
+		# select_number_df: data frame that contains number of selected features  
+		# l1_number_df: data frame that contains number of L1 selected features 
+		# select_rows: subset of models that are selected for comparison (one model per target)  
+		# output_folder: folder of output figure
+			
+	## 1. Obtain numbers of selected features for specified models 
+	l1_number = l1_number_df.loc[select_rows,].iloc[: ,0].values
+	select_number = select_number_df.loc[select_rows,].iloc[: ,0].values
+	number_df = pd.DataFrame({'ReBATE': select_number, 'L1': l1_number})	
+
+	## 2. Specify figure and font size 
+	plt.figure(figsize = (3.5, 6))
+	plt.rc('font', size = 22)
+	plt.rc('axes', titlesize = 25)
+	plt.rc('axes', labelsize = 22)
+	plt.rc('xtick', labelsize = 22)
+	plt.rc('ytick', labelsize = 22)
+	plt.rc('legend', fontsize = 22)
+
+	## 3. Visualize feature number comparison by boxplot
+	ax = sns.boxplot(data = number_df, showfliers = False, notch = True, color = 'lightgray')
+	# set label, title
+	ax.set(ylabel = 'Number of selected features')
+
+	## 4. Save boxplot 
+	plt.tight_layout()
+	plt.savefig(output_folder + '_feature_number_compared.pdf')
+	plt.close()
+
+	return 1		
 
 
 ## This function visualizes comparison of testing performance across different model classes. 

@@ -13,7 +13,7 @@ hyperparameter_file	<- Args[2];	# input file of optimal hyperparameter setting
 N_cores			<- Args[3];	# number of cores to run the jobs 
 # data folders
 target_folder		<- "data/compound_target_0.25_binary_data/";
-chemical_folder		<- "https://raw.githubusercontent.com/yhao-compbio/chemical/master/data/offsides_compounds/";
+chemical_folder		<- "/home/yunhao1/project/chemical/data/offsides_compounds/";
 output_folder		<- "data/compound_target_0.25_binary_feature_select_implementation/";
 job_name		<- "select_feature_by_cv_target_0.25_binary_implementation";
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -q epistasis_long
 #BSUB -J select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs
-#BSUB -n 50
+#BSUB -n 94
 #BSUB -o src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs.%J.out
 #BSUB -e src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs.%J.error
 #BSUB -N
@@ -59,3 +59,47 @@ module load python/3.7
 ./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs48.sh &
 ./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs49.sh &
 ./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs50.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs51.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs52.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs53.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs54.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs55.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs56.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs57.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs58.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs59.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs60.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs61.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs62.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs63.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs64.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs65.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs66.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs67.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs68.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs69.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs70.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs71.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs72.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs73.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs74.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs75.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs76.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs77.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs78.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs79.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs80.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs81.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs82.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs83.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs84.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs85.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs86.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs87.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs88.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs89.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs90.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs91.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs92.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs93.sh &
+./src/run/select_feature_by_regularization_target_0.25_binary_implementation_fingerprint_maccs94.sh &

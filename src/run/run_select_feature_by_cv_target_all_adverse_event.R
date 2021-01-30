@@ -22,7 +22,7 @@ ss_df <- read.delim(file = ss_file, sep = "\t", header = T);
 ss_cut_id <- which(ss_df$N_samples > ss_cut); 
 all_aes <- unique(ss_df$Group[ss_cut_id]);
 # AUC thresholds of target binding profile 
-all_mcs <- c("0.85", "0.9");
+all_mcs <- c("0.85");
 # combine requirements of target and adverse event to obtain input target-adverse event files
 all_ae_vec <- rep(all_aes, each = length(all_mcs));
 all_mc_vec <- rep(all_mcs, times = length(all_aes));
@@ -60,7 +60,7 @@ part[[1]] <- mapply(function(af, amv, aav){
 # generate parts that include number of folds and ranking methods, whether to include TURF, remove percentage, and supervised learning task  
 part[[2]] <- c("10 MultiSURF 0 0.1 classification");
 # generate parts that include supervised learning methods, tolerance , consistency score threshold, number of repeat runs, and whether to predict probability of positive class 
-part[[3]] <- c("RandomForest 50 0.5 20 1", "XGBoost 50 0.5 20 1");
+part[[3]] <- c("RandomForest 50 0.5 20 1");
 
 ## 4. Combine different parts to generate commands for jobs 
 commands <- generate.all.possible.hyperparameter.combinations(part);

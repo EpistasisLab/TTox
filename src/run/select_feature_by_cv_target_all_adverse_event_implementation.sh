@@ -1,7 +1,7 @@
 #!/bin/bash
 #BSUB -q epistasis_long
 #BSUB -J select_feature_by_cv_target_all_adverse_event_implementation
-#BSUB -n 149
+#BSUB -n 136
 #BSUB -o src/run/select_feature_by_cv_target_all_adverse_event_implementation.%J.out
 #BSUB -e src/run/select_feature_by_cv_target_all_adverse_event_implementation.%J.error
 #BSUB -N
@@ -145,16 +145,3 @@ module load python/3.7
 ./src/run/select_feature_by_cv_target_all_adverse_event_implementation134.sh &
 ./src/run/select_feature_by_cv_target_all_adverse_event_implementation135.sh &
 ./src/run/select_feature_by_cv_target_all_adverse_event_implementation136.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation137.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation138.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation139.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation140.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation141.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation142.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation143.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation144.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation145.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation146.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation147.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation148.sh &
-./src/run/select_feature_by_cv_target_all_adverse_event_implementation149.sh &

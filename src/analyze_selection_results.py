@@ -20,12 +20,14 @@ def main(argv):
 		# argv 3: name of metric that is used for model selection 
 		# argv 4: type of analysis task: 'tuning' for hyperparameter tuning results, 'implementation' for pipeline implementation results 
 		# argv 5: output file of analysis results
-		# argv 6: output file of visualization results 
+		# argv 6: output file of visualization results that compare models built upon selected features and models built upon all features 
 		# argv 7: input file that contains performance file names of L1-regularized models (only needed when argv 4 == 'implementation') 
-		# argv 8: input file that contains number of selected features of models (only needed when argv 4 == 'implementation')
-		# argv 9: threshold of tesing performance for model to be considered (only needed when argv 4 == 'implementation') 
-		# argv 10: prefix of prediction files (only needed when argv 4 == 'implementation') 
-		# argv 11: prefix of performance files (only needed when argv 4 == 'implementation') 
+		# argv 8: output file of visualization results that compare models built upon selected features and models built upon L1-selected features 
+		# argv 9: input file that contains number of selected features of models (only needed when argv 4 == 'implementation')
+		# argv 10: input file that contains number of selected features by L1 models (only needed when argv 4 == 'implementation')
+		# argv 11: threshold of tesing performance for model to be considered (only needed when argv 4 == 'implementation') 
+		# argv 12: prefix of prediction files (only needed when argv 4 == 'implementation') 
+		# argv 13: prefix of performance files (only needed when argv 4 == 'implementation') 
 			
 	## 1. Read in input performance files 
 	model_file_df = pd.read_csv(argv[1], sep = '\t', header = 0, index_col = 0)
@@ -59,29 +61,32 @@ def main(argv):
 		select_feat_test_df1.to_csv(argv[5] + '_testing_performance_summary_' + argv[3] + '_select.tsv', sep = '\t', float_format = '%.5f')
 		select_models = select_feat_test_df1.index
 		# visualize comparison among three model sets: 1) model built on selected features, ii) model built on all features, and iii) model built with L1 regularization  
-		visualize_compare = ttox_plot.visualize_testing_performance_comparison(model_file_df, argv[2], select_models, argv[6], argv[7])
-		
+		visualize_model_compare = ttox_plot.visualize_testing_performance_comparison(model_file_df, argv[2], select_models, argv[6], argv[7], argv[8])
+	
+		# read in data frame that contains number of selected features of models
+		select_feat_number_df = pd.read_csv(argv[9], sep = '\t', header = 0, index_col = 0)
+		l1_select_feat_number_df = pd.read_csv(argv[10], sep = '\t', header = 0, index_col = 0)	
+		# visualize comparison of feature numbers between model built on selected features and model built with L1 regularization
+		visualize_number_compare = ttox_plot.visualize_feature_number_comparison(select_feat_number_df, l1_select_feat_number_df, select_models, argv[6])
 		# read in testing performance of models built on all features 
 		all_test_file = model_file_df.loc['all_test', argv[3]]
 		all_feat_test_df = pd.read_csv(all_test_file, sep = '\t', header = 0, index_col = 0)
-		# read in data frame that contains number of selected features of models
-		select_feat_number_df = pd.read_csv(argv[8], sep = '\t', header = 0, index_col = 0)
 		# computes basic statistics of two model sets: 1) model built on selected features and ii) model built on all features 
-		selection_stat = ttox_selection.compute_feature_selection_statistic(all_feat_test_df.loc[select_models,], select_feat_test_df1, select_feat_number_df.loc[select_models,], optimal_col, float(argv[9]))
-		stat_file = open(argv[5] + '_mc_' + argv[9] + '_feature_selection_statistics.txt', 'w')
+		selection_stat = ttox_selection.compute_feature_selection_statistic(all_feat_test_df.loc[select_models,], select_feat_test_df1, select_feat_number_df.loc[select_models,], optimal_col, float(argv[11]))
+		stat_file = open(argv[5] + '_mc_' + argv[11] + '_feature_selection_statistics.txt', 'w')
 		for ss in selection_stat:
 			stat_file.write('%s\n' % ss)
 		stat_file.close()
 		
 		# collect predictions from models under the optimal hyperparameter setting and models without feature selection  
-		select_pred_df, all_pred_df = ttox_selection.collect_model_prediction(select_feat_test_df1, optimal_col, float(argv[9]), argv[10])
-		select_pred_df.to_csv(argv[5] + '_mc_' + argv[9] + '_offsides_compounds_binding_affinity_prediction_select_features.tsv', sep = '\t', float_format = '%.5f')
-		all_pred_df.to_csv(argv[5] + '_mc_' + argv[9] + '_offsides_compounds_binding_affinity_prediction_all_features.tsv', sep = '\t', float_format = '%.5f')
+		select_pred_df, all_pred_df = ttox_selection.collect_model_prediction(select_feat_test_df1, optimal_col, float(argv[11]), argv[12])
+		select_pred_df.to_csv(argv[5] + '_mc_' + argv[11] + '_offsides_compounds_binding_affinity_prediction_select_features.tsv', sep = '\t', float_format = '%.5f')
+		all_pred_df.to_csv(argv[5] + '_mc_' + argv[11] + '_offsides_compounds_binding_affinity_prediction_all_features.tsv', sep = '\t', float_format = '%.5f')
 		
 		# connect targets to relevant structure features from models with best performance 
-		target_structure_df, tm_structure_df = ttox_selection.connect_structure_target(select_feat_test_df1, optimal_col, float(argv[9]), argv[11])
-		target_structure_df.to_csv(argv[5] + '_mc_' + argv[9] + '_target_structure.tsv', sep = '\t', index = False, header = False)		
-		tm_structure_df.to_csv(argv[5] + '_mc_' + argv[9] + '_target_measurement_structure.tsv', sep = '\t', index = False)  
+		target_structure_df, tm_structure_df = ttox_selection.connect_structure_target(select_feat_test_df1, optimal_col, float(argv[11]), argv[13])
+		target_structure_df.to_csv(argv[5] + '_mc_' + argv[11] + '_target_structure.tsv', sep = '\t', index = False, header = False)		
+		tm_structure_df.to_csv(argv[5] + '_mc_' + argv[11] + '_target_measurement_structure.tsv', sep = '\t', index = False)  
 
 	return 1
  

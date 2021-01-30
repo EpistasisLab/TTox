@@ -1,3 +1,3 @@
 module add R
-Rscript src/run/run_select_feature_by_regularization_target_0.25_binary_implementation.R	fingerprint_maccs	50
-Rscript	src/run/run_select_feature_by_regularization_target_0.25_binary_implementation.R	descriptor_all	50
+Rscript src/run/run_select_feature_by_regularization_target_0.25_binary_implementation.R	fingerprint_maccs	100
+Rscript	src/run/run_select_feature_by_regularization_target_0.25_binary_implementation.R	descriptor_all	100
