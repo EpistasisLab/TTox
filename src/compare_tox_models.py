@@ -103,9 +103,9 @@ def main(argv):
 
 	## 4. Compare and visualize comparison of testing performance across different feature types
 	# structure features vs selected target features  
-	structure_select_compare = ttox_plot.plot_comparison_scatter(perf_df['structure_model_auc'].values, perf_df['target_select_model_auc'].values, [0.5, 0.75], [], 'AUROC by structure features', 'AUROC by selected targets', argv[5] + '_structure_select.pdf', False)
+	structure_select_compare = ttox_plot.plot_comparison_scatter(perf_df['structure_model_auc'].values, perf_df['target_select_model_auc'].values, [0.5, 0.75], [], 'AUROC by structure features', 'AUROC by selected targets', argv[5] + '_structure_select.pdf', True)
 	# all target features vs selected target features 
-	all_select_compare = ttox_plot.plot_comparison_scatter(perf_df['target_all_model_auc'].values, perf_df['target_select_model_auc'].values, [0.5, 0.75], [], 'AUROC by all targets', 'AUROC by selected targets', argv[5] + '_all_select.pdf', False)
+	all_select_compare = ttox_plot.plot_comparison_scatter(perf_df['target_all_model_auc'].values, perf_df['target_select_model_auc'].values, [0.5, 0.75], [], 'AUROC by all targets', 'AUROC by selected targets', argv[5] + '_all_select.pdf', True)
 
 	return 1
 

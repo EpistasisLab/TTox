@@ -120,7 +120,7 @@ def plot_comparison_scatter(x_metric, y_metric, xy_lim, cut_list, x_label, y_lab
 	xy_lim_upper = xy_lim[1]
 	xy_range = xy_lim_upper - xy_lim_lower
 	# y coordiante to label p-value 
-	pv_y_margin = 0.0625 * xy_range - 0.02
+	pv_y_margin = 0.02 * xy_range + 0.00125
 	pv_y = xy_lim_upper + pv_y_margin
 	# x coordiantes to label p-value 
 	pv_x_margin = 0.0089 * xy_range + 0.01
