@@ -23,6 +23,8 @@
 
 ## Visualize performance of adverse event prediction models incorporated with feature selection 
 
++ The correlation between ratio of positive to negative samples and width of 95% confidence interval for AUROC is shown in [this scatter plot](compound_target_all_adverse_event_feature_select_implementation/descriptor_all_all_adverse_event_1_testing_performance_compare_p_to_n_ratio_vs_auc_ci_width.pdf)
+
 + The performance of our feature selection pipeline was compared against other generic models. Testing AUROC was adopted to evaluate model performance. The comparison was then visualized in the form of scatter plot, where the performance of our pipeline is shown in y axis and the performance of the compared item is shown in x axis. The analysis was conducted for all compound target-adverse event datasets and the visualization plots were stored in [`compound_target_all_adverse_event_feature_select_implementation/`] (compound_target_all_adverse_event_feature_select_implementation/). Two forms of comparison were made:
   + our pipeline vs generic model without feature selection, shown in [this plot](compound_target_all_adverse_event_feature_select_implementation/descriptor_all_all_adverse_event_1_testing_performance_compare_all_select.pdf)
   + our pipeline vs generic model using molecular descriptors as features, shown in [this plot](compound_target_all_adverse_event_feature_select_implementation/descriptor_all_all_adverse_event_1_testing_performance_compare_structure_select.pdf)

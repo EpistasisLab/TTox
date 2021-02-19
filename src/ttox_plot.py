@@ -498,3 +498,53 @@ def visualize_model_roc_comparison(roc_list, roc_title, plot_file):
 
 	return 1
 
+
+## This function visualizes correlation between two vectors by scatter plot
+def visualize_correlation_scatter(x_value, y_value, x_label, y_label, plot_file, show_pv = True):
+	## 0. Input arguments: 
+		# x_value: values of set 1, to be plotted on the x axis  
+		# y_value: values of set 2, to be plotted on the y axis  
+		# x_label: label of x axis 
+		# y_label: label of y axis 
+		# plot_file: file name of output figures  
+		# show_pv: whether to show p value comparing the x and y axis values    
+
+	## 1. Specify plotting parameters 
+	# y axis range 
+	y_lower = np.min(y_value)
+	y_upper = np.max(y_value)
+	y_range = y_upper - y_lower
+	# y coordiante to label p-value 
+	pv_y_margin = y_range/15
+	pv_y = y_upper + pv_y_margin
+	# x coordiantes to label p-value 
+	pv_x = np.min(x_value)
+
+	## 2. Specify figure and font size 
+	plt.figure(figsize = (6, 6))
+	plt.rc('font', size = 22)
+	plt.rc('axes', titlesize = 25)
+	plt.rc('axes', labelsize = 22)
+	plt.rc('xtick', labelsize = 22)
+	plt.rc('ytick', labelsize = 22)
+	plt.rc('legend', fontsize = 22)
+
+	## 3. Visualiz correlation between two vectors by scatter plot
+	# make scatter plot
+	plt.scatter(x_value, y_value, c = 'grey')
+	# compute Spearman correlation coefficient and p-value
+	if show_pv == True:
+		s_cor, pv = stats.spearmanr(x_value, y_value)
+		text_col = 'black'
+		if pv < 0.05:
+			text_col = 'red'
+		pv_text = 'ρ=' + str(round(s_cor, 2)) + ', P=' + np.format_float_scientific(pv, precision = 1)
+		plt.text(pv_x, pv_y, pv_text, size = 22, c = text_col)
+	# set x and y axis  
+	plt.xlabel(x_label)
+	plt.ylabel(y_label)
+
+	## 4. Save boxplot 
+	plt.tight_layout()	
+	plt.savefig(plot_file)
+	plt.close()
