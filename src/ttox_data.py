@@ -139,3 +139,24 @@ def generate_learning_dataset(relation_file, feature_file, min_N_sample, test_pr
 	groups_summary_df.to_csv(output_sum_file, sep = '\t', index = False)
 	
 	return 1 
+
+
+## This function shuffles outcome labels of input feature-response data, then write shuffled data to output file 
+def shuffle_data_outcome(data_file, outcome_col, seed_no, output_folder):
+	## 0. Input arguments 
+		# data_file: input file that contains training feature-response data 
+		# outcome_col: name of label column
+		# seed_no: random seed number 
+		# output_folder: folder name of output data file
+
+	## 1.  Shuffle labels of training data 
+	# read in training feature-response data  
+	data_df = pd.read_csv(data_file, sep = '\t', header = 0, index_col = 0)
+	# shuffle the outcome labels of samples among training data
+	data_df[outcome_col] = data_df[outcome_col].sample(frac = 1, random_state = seed_no).values
+
+	## 2. Write shuffled dataset to output data file   
+	output_file = output_folder + '_shuffle_' + str(seed_no) + '.tsv'
+	data_df.to_csv(output_file, sep = '\t')
+        
+	return 1

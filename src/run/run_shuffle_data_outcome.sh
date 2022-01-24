@@ -1,0 +1,2 @@
+module add R
+Rscript	src/run/run_shuffle_data_outcome.R	data/compound_target_tox21_data/fingerprint_maccs_probability/	data/compound_target_tox21_data/fingerprint_maccs_probability_shuffle/	shuffle_data_outcome_tox21_compound_target	

@@ -28,6 +28,8 @@
 
 + [`derive_binding_profile.py`](derive_binding_profile.py) derives target binding profile of query compounds using the predictive features identified by feature selection pipeline.
 
++ [`shuffle_data_outcome.py`](shuffle_data_outcome.py) shuffle outcomes labels of input feature-response data. [`run/run_shuffle_data_outcome.R`](run/run_shuffle_data_outcome.R) generates shell scripts that shuffle outcomes labels of input feature-response data.
+
 + [`functions.R`](functions.R) R functions required for other R scripts in the repository.
 
 ## Executable shell scripts
@@ -47,3 +49,5 @@
 + [`run/compare_tox_models.sh`](run/compare_tox_models.sh) runs [`compare_tox_models.py`](compare_tox_models.py) on feature selection implementation results of all compound target-adverse event datasets.
 
 + [`run/derive_binding_profile.sh`](run/derive_binding_profile.sh) runs [`derive_binding_profile.py`](derive_binding_profile.py) on molecular fingerprints of 8,541 compounds screened by Tox21 project, as well as molecular fingerprints of 708,409 compounds from DSSTox.
+
++ [`run/run_shuffle_data_outcome.sh`](run/run_shuffle_data_outcome.sh) runs [`run/run_shuffle_data_outcome.R`](run/run_shuffle_data_outcome.R) to generate [`run/shuffle_data_outcome_tox21_compound_target.sh`](run/shuffle_data_outcome_tox21_compound_target.sh). [`run/shuffle_data_outcome_tox21_compound_target.sh`](run/shuffle_data_outcome_tox21_compound_target.sh) implements [`shuffle_data_outcome.py`](shuffle_data_outcome.py) on 15 compound target binding-Tox21 assay outcome datasets. 
